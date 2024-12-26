@@ -2,6 +2,7 @@ package routers
 
 import (
 	"drugims/controller"
+	"drugims/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -30,6 +31,13 @@ func SetupRouter() *gin.Engine {
 
 	//Home主页
 	r.GET("/home", controller.Home)
-
+	// 用户路由组
+	userGroup := r.Group("/user")
+	{
+		//用户注册
+		userGroup.POST("/register", middleware.SHAMiddleWare(), controller.UserRegister)
+		//用户登录
+		userGroup.POST("/login", middleware.SHAMiddleWare(), controller.UserLogin)
+	}
 	return r
 }
