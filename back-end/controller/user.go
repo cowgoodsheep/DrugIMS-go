@@ -3,6 +3,7 @@ package controller
 import (
 	"drugims/logic"
 	"drugims/model"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,6 +16,8 @@ func UserRegister(c *gin.Context) {
 	u.UserName = c.PostForm("user_name")
 	u.Telephone = c.PostForm("telephone")
 	passwordTemp, ok := c.Get("password")
+	fmt.Println(u)
+	fmt.Println(passwordTemp)
 	u.Password = passwordTemp.(string)
 	if !ok {
 		c.JSON(http.StatusOK, gin.H{

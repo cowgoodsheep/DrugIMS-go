@@ -3,6 +3,9 @@
     <h1>接口响应</h1>
     <p v-if="message">{{ message }}</p>
     <p v-else>加载中...</p>
+
+    <router-link to="/user/register">去注册</router-link>
+
   </div>
 </template>
 
