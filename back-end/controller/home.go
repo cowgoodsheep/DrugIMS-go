@@ -10,6 +10,6 @@ import (
 func Home(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"code": 200,
-		"msg":  "success",
+		"msg":  "你好",
 	})
 }
