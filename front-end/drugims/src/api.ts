@@ -7,7 +7,7 @@ import type { InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 
 // 创建 Axios 实例
 const api = axios.create({
-    baseURL: '/api', // 后端 API 地址
+    baseURL: 'http://localhost:8080', // 后端 API 地址
     timeout: 10000, // 请求超时时间
 });
 
@@ -47,13 +47,8 @@ export const get = async <T = any>(url: string, config?: InternalAxiosRequestCon
 };
 
 export const post = async <T = any>(url: string, data?: any, config?: InternalAxiosRequestConfig) => {
-    try {
-        const response = await api.post<T>(url, data, config);
-        return response.data;
-    } catch (error) {
-        console.error('An error occurred:', error);
-        // throw error;
-    }
+    const response = await api.post<T>(url, data, config);
+    return response.data;
 };
 
 export const put = async <T = any>(url: string, data?: any, config?: InternalAxiosRequestConfig) => {
