@@ -1,43 +1,59 @@
 <template>
+    <!-- 登录和注册表单 -->
     <div class="auth-container">
-        <!-- 登录 -->
-        <el-form v-if="isLogin" :model="loginForm" class="form-container">
-            <h3>用户登录</h3>
-            <el-form-item label="手机号码:">
-                <el-input v-model="loginForm.telephone" placeholder="请输入手机号码"></el-input>
-            </el-form-item>
-            <el-form-item label="密码:">
-                <el-input v-model="loginForm.password" type="password" placeholder="请输入密码"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="sendLoginData">登录</el-button>
-                <el-button @click="goToRegister">注册</el-button>
-            </el-form-item>
-        </el-form>
+        <transition name="fade" mode="out-in">
+            <!-- 登录表单 -->
+            <el-form v-if="isLogin" :model="loginForm" class="form-container">
+                <h3>用户登录</h3>
+                <el-form-item label="用户名:">
+                    <el-input v-model="loginForm.user_name" placeholder="请输入用户名"></el-input>
+                </el-form-item>
+                <el-form-item label="密码:">
+                    <el-input v-model="loginForm.password" type="password" placeholder="请输入密码"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="sendLoginData">登录</el-button>
+                    <el-button @click="goToRegister">注册</el-button>
+                </el-form-item>
+            </el-form>
 
-        <!-- 注册 -->
-        <el-form v-else :model="registerForm" class="form-container">
-            <h3>用户注册</h3>
-            <el-form-item label="姓名:">
-                <el-input v-model="registerForm.user_name" placeholder="请输入用户名"></el-input>
-            </el-form-item>
-            <el-form-item label="密码:">
-                <el-input v-model="registerForm.password" type="password" placeholder="请输入密码"></el-input>
-            </el-form-item>
-            <el-form-item label="手机号码:">
-                <el-input v-model="registerForm.telephone" placeholder="请输入手机号码"></el-input>
-            </el-form-item>
-            <el-form-item label="角色:">
-                <el-radio-group v-model="registerForm.role">
-                    <el-radio :label="2">客户</el-radio>
-                    <el-radio :label="3">供应商</el-radio>
-                </el-radio-group>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="sendRegisterData">点击注册</el-button>
-                <el-button @click="goToLogin">返回</el-button>
-            </el-form-item>
-        </el-form>
+            <!-- 注册表单 -->
+            <el-form v-else :model="registerForm" class="form-container">
+                <h3>用户注册</h3>
+                <el-form-item label="姓名:">
+                    <el-input v-model="registerForm.user_name" placeholder="请输入用户名"></el-input>
+                </el-form-item>
+                <el-form-item label="密码:">
+                    <el-input v-model="registerForm.password" type="password" placeholder="请输入密码"></el-input>
+                </el-form-item>
+                <el-form-item label="手机号码:">
+                    <el-input v-model="registerForm.telephone" placeholder="请输入手机号码"></el-input>
+                </el-form-item>
+                <el-form-item label="角色:">
+                    <el-radio-group v-model="registerForm.role">
+                        <el-radio :label="1">管理员</el-radio>
+                        <el-radio :label="2">客户</el-radio>
+                        <el-radio :label="3">供应商</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="sendRegisterData">点击注册</el-button>
+                    <el-button @click="goToLogin">返回</el-button>
+                </el-form-item>
+            </el-form>
+        </transition>
+    </div>
+
+    <div class="auth-video">
+        <!-- 背景视频 -->
+        <video autoplay muted loop class="background-video">
+            <source src="@/assets/background.mp4" type="video/mp4">
+            您的浏览器不支持视频标签。
+        </video>
+    </div>
+    <!-- 半透明覆盖层 -->
+    <div class="overlay">
+
     </div>
 </template>
 
@@ -123,6 +139,46 @@ async function sendRegisterData() {
 </script>
 
 <style scoped>
+.auth-video {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.background-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    /* 半透明黑色覆盖层 */
+    z-index: -99;
+}
+
+.form-container {
+    position: relative;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.8);
+    /* 可选：增加表单背景透明度 */
+    border-radius: 15px;
+    padding: 35px;
+    box-shadow: 0 0 25px #cacaca;
+}
+
 .auth-container {
     width: 350px;
     margin: 180px auto;
@@ -142,8 +198,14 @@ async function sendRegisterData() {
     color: #505450;
 }
 
-.form-container .el-form-item__content {
-    display: flex;
-    justify-content: center;
+/* 添加过渡动画 */
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.15s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
 }
 </style>
