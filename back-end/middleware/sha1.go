@@ -3,10 +3,7 @@ package middleware
 import (
 	"crypto/sha1"
 	"encoding/hex"
-	"fmt"
-	"net/http"
-
-	"github.com/gin-gonic/gin"
+	"errors"
 )
 
 const (
@@ -25,22 +22,9 @@ func SHA1(s string) string {
 }
 
 // SHAMiddleWare SHA1加密用户密码中间件
-func SHAMiddleWare() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		// 从请求的查询参数中获取password
-		password := c.Query("password")
-		// 如果找不到，就去Form表单去找
-		if password == "" {
-			password = c.PostForm("password")
-		}
-		fmt.Println(password)
-		if len(password) < MinPasswordSize || len(password) > MaxPasswordSize {
-			c.JSON(http.StatusOK, gin.H{"err": "密码长度小于或大于限制"})
-			c.Abort() // 密码输入出错，跳过后续操作
-			return
-		}
-		// 对传入的password进行SHA1加密，并存入ctx中
-		c.Set("password", SHA1(password))
-		c.Next()
+func SHAMiddleWare(password string) (string, error) {
+	if len(password) < MinPasswordSize || len(password) > MaxPasswordSize {
+		return "", errors.New("密码长度小于或大于限制")
 	}
+	return SHA1(password), nil
 }

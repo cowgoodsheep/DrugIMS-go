@@ -1,8 +1,7 @@
-package routers
+package router
 
 import (
 	"drugims/controller"
-	"drugims/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -35,9 +34,9 @@ func SetupRouter() *gin.Engine {
 	userGroup := r.Group("/user")
 	{
 		//用户注册
-		userGroup.POST("/register", middleware.SHAMiddleWare(), controller.UserRegister)
+		userGroup.POST("/register", controller.UserRegister)
 		//用户登录
-		userGroup.POST("/login", middleware.SHAMiddleWare(), controller.UserLogin)
+		userGroup.POST("/login", controller.UserLogin)
 	}
 	return r
 }

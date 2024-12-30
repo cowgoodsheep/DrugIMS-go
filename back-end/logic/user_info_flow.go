@@ -72,6 +72,7 @@ func (u *UserInfoFlow) registerUser() error {
 		UserName:  u.username,
 		Telephone: u.telephone,
 		Password:  u.password,
+		Status:    1,
 	}
 	//上传数据库
 	if err := model.CreateUser(userinfo); err != nil {

@@ -65,7 +65,9 @@ func JWTMiddleWare() gin.HandlerFunc {
 		if tokenString == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"code": 401,
-				"msg":  "用户不存在",
+				"data": gin.H{
+					"msg": "用户不存在",
+				},
 			})
 			c.Abort() //验证失败，跳过后续操作
 			return
@@ -75,7 +77,9 @@ func JWTMiddleWare() gin.HandlerFunc {
 		if !ok {
 			c.JSON(http.StatusForbidden, gin.H{
 				"code": 403,
-				"msg":  "token错误",
+				"data": gin.H{
+					"msg": "token错误",
+				},
 			})
 			c.Abort() //验证失败，跳过后续操作
 			return
@@ -84,7 +88,9 @@ func JWTMiddleWare() gin.HandlerFunc {
 		if time.Now().Unix() > claims.ExpiresAt {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"code": 401,
-				"msg":  "token过期",
+				"data": gin.H{
+					"msg": "token过期",
+				},
 			})
 			c.Abort() //验证失败，跳过后续操作
 			return

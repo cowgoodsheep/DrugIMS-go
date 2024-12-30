@@ -36,11 +36,7 @@ func IsUserExistByTelephone(telephone string) bool {
 	var u UserInfo
 	dao.DB.Where("telephone=?", telephone).Where("status=?", 1).First(&u)
 	//如果找不到
-	if u.UserId == 0 {
-		return false
-	} else {
-		return true
-	}
+	return u.UserId != 0
 }
 
 // 根据ID判断该用户是否存在
@@ -57,12 +53,12 @@ func IsUserExistByUserID(userId int32) bool {
 
 // QueryUserByTelephone 用手机号寻找用户
 func QueryUserByTelephone(telephone string) (*UserInfo, error) {
-	var uFind *UserInfo
-	dao.DB.Where("telephone=?", telephone).Where("status=?", 1).First(uFind)
+	var uFind UserInfo
+	dao.DB.Where("telephone=?", telephone).Where("status=?", 1).First(&uFind)
 	if uFind.UserId == 0 {
 		return nil, errors.New("该用户不存在")
 	}
-	return uFind, nil
+	return &uFind, nil
 }
 
 // 根据手机号寻找用户
@@ -70,11 +66,11 @@ func FindUserByTelephone(u *UserInfo) error {
 	if u == nil {
 		return errors.New("空指针错误")
 	}
-	var uFind *UserInfo
-	dao.DB.Where("telephone=?", u.Telephone).Where("status=?", 1).First(uFind)
+	var uFind UserInfo
+	dao.DB.Where("telephone=?", u.Telephone).Where("status=?", 1).First(&uFind)
 	if uFind.UserId == 0 {
 		return errors.New("该用户不存在")
 	}
-	u = uFind
+	u = &uFind
 	return nil
 }
