@@ -3,7 +3,7 @@ import RegisterUser from '../views/RegisterUser.vue'
 
 const routes = [
   {
-    path: '/user/register',
+    path: '/',
     name: 'RegisterUser',
     component: RegisterUser
   }
