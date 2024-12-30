@@ -48,7 +48,6 @@
         <!-- 背景视频 -->
         <video autoplay muted loop class="background-video">
             <source src="@/assets/background.mp4" type="video/mp4">
-            您的浏览器不支持视频标签。
         </video>
     </div>
     <!-- 半透明覆盖层 -->
@@ -139,6 +138,7 @@ async function sendRegisterData() {
 </script>
 
 <style scoped>
+/* 背景视频设置 */
 .auth-video {
     position: relative;
     width: 100vw;
@@ -158,37 +158,26 @@ async function sendRegisterData() {
     transform: translateX(-50%) translateY(-50%);
 }
 
+/* 半透明覆盖层 */
 .overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
     /* 半透明黑色覆盖层 */
+    background: rgba(0, 0, 0, 0.25);
     z-index: -99;
 }
 
+/* 表单 */
 .form-container {
     position: relative;
     z-index: 1;
-    background: rgba(255, 255, 255, 0.8);
     /* 可选：增加表单背景透明度 */
+    background: rgba(255, 255, 255, 0.8);
     border-radius: 15px;
     padding: 35px;
-    box-shadow: 0 0 25px #cacaca;
-}
-
-.auth-container {
-    width: 350px;
-    margin: 180px auto;
-}
-
-.form-container {
-    background-color: #fff;
-    border: 1px solid #eaeaea;
-    border-radius: 15px;
-    padding: 35px 35px 15px 35px;
     box-shadow: 0 0 25px #cacaca;
 }
 
@@ -196,6 +185,19 @@ async function sendRegisterData() {
     text-align: center;
     margin-bottom: 20px;
     color: #505450;
+}
+
+.auth-container {
+    /* 绝对定位 */
+    position: absolute;
+    /* 距离顶部50% */
+    top: 50%;
+    /* 距离左侧50% */
+    left: 50%;
+    /* 使用transform来居中 */
+    transform: translate(-50%, -50%);
+    /* 放到顶层 */
+    z-index:1;
 }
 
 /* 添加过渡动画 */
