@@ -1,19 +1,24 @@
+
 <template>
-  <div id="app">
-    <nav>
-      <router-link to="/home">主页</router-link>
-    </nav>
-    <router-view/>
-  </div>
+  <router-view />
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #244874;
-  margin-top: 60px;
+
+<script lang = "ts" setup>
+
+</script>
+
+<style >
+html,
+body,
+h3 {
+  margin: 0;
+  padding: 0;
+  border: none;
+  /* 清除边框 */
+}
+
+.el-card {
+  border-radius: 10px !important;
 }
 </style>
