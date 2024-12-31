@@ -28,15 +28,37 @@ func SetupRouter() *gin.Engine {
 	// 设置跨域访问处理中间件
 	r.Use(corsMiddleware())
 
-	//Home主页
+	// Home主页
 	r.GET("/home", controller.Home)
 	// 用户路由组
 	userGroup := r.Group("/user")
 	{
-		//用户注册
+		// 用户注册
 		userGroup.POST("/register", controller.UserRegister)
-		//用户登录
+		// 用户登录
 		userGroup.POST("/login", controller.UserLogin)
+
+		// 获取全部用户
+		userGroup.POST("/getAll")
+		// 更新用户信息
+		userGroup.POST("/updateInfo")
+		// 用户注销(软删除)
+		userGroup.POST("/delete")
+	}
+
+	// 药品路由组
+	drugGroup := r.Group("/drug")
+	{
+		// 获取全部药品
+		userGroup.POST("/getAll")
+		// 创建药品
+		userGroup.POST("/create")
+		// 删除药品
+		userGroup.POST("/delete")
+		// 购买药品
+		userGroup.POST("/buy")
+		// 进货
+		userGroup.POST("/provide")
 	}
 	return r
 }
