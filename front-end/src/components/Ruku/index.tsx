@@ -21,8 +21,8 @@ const columns = [
     },
     {
         title: '供应商名称',
-        dataIndex: 'username',
-        key: 'username',
+        dataIndex: 'user_name',
+        key: 'user_name',
         fixed: 'left',
         width: 100
     },

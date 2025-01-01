@@ -2,6 +2,7 @@ package router
 
 import (
 	"drugims/controller"
+	"drugims/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -11,7 +12,8 @@ func corsMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*") // 允许所有来源访问，也可设置特定域名
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Origin, Content-Type")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Origin, Content-Type, Token, token")
+		c.Writer.Header().Set("Access-Control-Expose-Headers", "Origin, Content-Type, Token, token")
 
 		if c.Request.Method == "OPTIONS" {
 			c.AbortWithStatus(200)
@@ -37,11 +39,11 @@ func SetupRouter() *gin.Engine {
 		userGroup.POST("/register", controller.UserRegister)
 		// 用户登录
 		userGroup.POST("/login", controller.UserLogin)
+		// 更新用户信息
+		userGroup.POST("/update", middleware.JWTMiddleWare(), controller.UserUpdate)
 
 		// // 获取全部用户
 		// userGroup.POST("/getAll")
-		// // 更新用户信息
-		// userGroup.POST("/updateInfo")
 		// // 用户注销(软删除)
 		// userGroup.POST("/delete")
 	}

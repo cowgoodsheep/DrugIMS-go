@@ -31,8 +31,8 @@ export default function PublicDb({ searchValue }:{searchValue:string}) {
         },
         {
             title: '用户名',
-            dataIndex: 'username',
-            key: 'username',
+            dataIndex: 'user_name',
+            key: 'user_name',
             fixed: 'left',
             width: 100
         },
@@ -64,9 +64,9 @@ export default function PublicDb({ searchValue }:{searchValue:string}) {
           onFilter: (value, record) => record.role.indexOf(value) === 0,
         },
         {
-            title: '联系方式',
-            dataIndex: 'contact_info',
-            key: 'contact_info',
+            title: '电话号',
+            dataIndex: 'telephone',
+            key: 'telephone',
             width: 100
         },
         {

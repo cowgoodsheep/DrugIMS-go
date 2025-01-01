@@ -21,8 +21,8 @@ const columns = [
     },
     {
         title: '客户名称',
-        dataIndex: 'username',
-        key: 'username',
+        dataIndex: 'user_name',
+        key: 'user_name',
         width: 100
     },
     {

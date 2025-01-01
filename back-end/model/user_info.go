@@ -28,7 +28,7 @@ func CreateUser(u *UserInfo) error {
 	if u == nil {
 		return errors.New("空指针错误")
 	}
-	return dao.DB.Create(u).Error
+	return dao.DB.Debug().Create(u).Error
 }
 
 // 根据手机号判断该用户是否存在
@@ -47,6 +47,13 @@ func IsUserExistByUserName(userName string) bool {
 	return u.UserId != 0
 }
 
+// QueryUserByUserId 用id寻找用户
+func QueryUserByUserId(userId int32) *UserInfo {
+	var uFind UserInfo
+	dao.DB.Where("user_id=?", userId).Where("status=?", 1).First(&uFind)
+	return &uFind
+}
+
 // QueryUserByTelephone 用手机号寻找用户
 func QueryUserByTelephone(telephone string) *UserInfo {
 	var uFind UserInfo
@@ -59,4 +66,9 @@ func QueryUserByUserName(userName string) *UserInfo {
 	var uFind UserInfo
 	dao.DB.Where("user_name=?", userName).Where("status=?", 1).First(&uFind)
 	return &uFind
+}
+
+// UpdateUserInfo 更新用户数据
+func UpdateUserInfo(userId int32, userInfo *UserInfo) {
+	dao.DB.Model(&UserInfo{}).Where("user_id = ?", userId).Updates(userInfo)
 }

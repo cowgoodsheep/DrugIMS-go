@@ -26,7 +26,7 @@ const Home = () => {
   useEffect(() => {
     sessionStorage.setItem('pathname', pathname)
   }, [pathname])
-  const username = JSON.parse(localStorage.getItem('userinfo')).username
+  const user_name = JSON.parse(localStorage.getItem('userinfo')).user_name
 
   return (
     <div
@@ -50,7 +50,7 @@ const Home = () => {
           avatarProps={{
             src: 'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
             size: 'small',
-            title: username,
+            title: user_name,
             render: (props, dom) => {
               return (
                 <Dropdown

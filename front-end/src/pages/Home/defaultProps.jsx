@@ -7,7 +7,7 @@ if((userinfo)){
   role= userinfo.role
   }
 const defaultProps = {
-    title: '药品存销信息管理系统',
+    title: 'drugims',
     logo: logo,
     route: {
         path: '/',
@@ -16,7 +16,7 @@ const defaultProps = {
                 path: '/user',
                 name: '用户信息',
                 access: 'canAdmin',
-                hideInMenu:role!=='管理员'
+                hideInMenu:role!=='1'
             },
             {
                 path: '/drug',
@@ -26,28 +26,28 @@ const defaultProps = {
             {
                 name: '药品库存',
                 path: '/inventory',
-                hideInMenu:role!=='管理员'
+                hideInMenu:role!=='1'
             },    {
                 name: '销售信息',
                 path: '/sellMsg',
-                hideInMenu:role!=='管理员'
+                hideInMenu:role!=='1'
 
             }, 
             {
                 name: '入库信息',
                 path: '/addMsg',
-                hideInMenu:role!=='管理员'
+                hideInMenu:role!=='1'
 
             }, 
             {
                 name: '我的购买记录',
                 path: '/myDrug',
-                hideInMenu:role!=='客户'
+                hideInMenu:role!=='2'
             }, 
             {
                 name: '我的进货记录',
                 path: '/myinput',
-                hideInMenu:role!=='供应商'
+                hideInMenu:role!=='3'
             }, 
         ],
     },

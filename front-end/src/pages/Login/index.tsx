@@ -48,7 +48,7 @@ const Page = () => {
       localStorage.setItem('userinfo', JSON.stringify(data[0]))
       sessionStorage.setItem('pathname', '')
       navigate('/home')
-      location.reload();
+      // location.reload();
     } else {
       message.warning(data.data.msg)
     }
@@ -103,8 +103,8 @@ const Page = () => {
               placeholder="请选择"
               allowClear
             >
-              <Option value="1">客户</Option>
-              <Option value="2">供应商</Option>
+              <Option value="2">客户</Option>
+              <Option value="3">供应商</Option>
             </Select>
           </Form.Item>
           <Form.Item wrapperCol={{ offset: 10, span: 16 }} >

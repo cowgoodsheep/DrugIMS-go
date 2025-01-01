@@ -3,8 +3,8 @@ var express = require('express');
 var {repairUserInfo,getAllUser,deleteUser,repairUser}= require('../api/index');
 var router = express.Router();
 router.post('/setUserInfo', async(req, res, next) => {
-    const {username,password,contact_info,address,targetId} = req.body;
-    const data =await repairUserInfo(username,password,contact_info,address,targetId)
+    const {user_name,password,telephone,address,user_id} = req.body;
+    const data =await repairUserInfo(user_name,password,telephone,address,user_id)
     res.json(data);
   });
   router.post('/getAllUser', async(req, res, next) => {
@@ -18,8 +18,8 @@ router.post('/setUserInfo', async(req, res, next) => {
     res.json(data);
   });
   router.post('/repairUser', async(req, res, next) => {
-    const {username,password,role,contact_info,address,user_id} = req.body
-    const data =await repairUser(username,password,role,contact_info,address,user_id)
+    const {user_name,password,role,telephone,address,user_id} = req.body
+    const data =await repairUser(user_name,password,role,telephone,address,user_id)
     res.json(data);
   });
   module.exports = router;

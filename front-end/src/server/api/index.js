@@ -1,9 +1,9 @@
 const { connection } = require('../mysql/mysql')
 const { getDate } = require('../utils/index')
 //登录注册
-const register = (username, password, role) => {
+const register = (user_name, password, role) => {
     return new Promise((resolve, reject) => {
-        connection.query(`INSERT INTO user_info (username,password,role) VALUES ('${username}' , '${password}','${role}' );`, (err, result, yield) => {
+        connection.query(`INSERT INTO user_info (user_name,password,role) VALUES ('${user_name}' , '${password}','${role}' );`, (err, result, yield) => {
             if (err) {
                 reject(err)
             } else {
@@ -12,9 +12,9 @@ const register = (username, password, role) => {
         })
     })
 }
-const login = (username, password) => {
+const login = (user_name, password) => {
     return new Promise((resolve, reject) => {
-        connection.query(`SELECT * FROM user_info WHERE username='${username}' AND password='${password}';`, (err, result, yield) => {
+        connection.query(`SELECT * FROM user_info WHERE user_name='${user_name}' AND password='${password}';`, (err, result, yield) => {
             if (err) {
                 reject(err)
             } else {
@@ -24,10 +24,10 @@ const login = (username, password) => {
     })
 }
 //个人信息
-const repairUserInfo = (username, password, contact_info, address, targetId) => {
+const repairUserInfo = (user_name, password, telephone, address, user_id) => {
     return new Promise((resolve, reject) => {
-        connection.query(`UPDATE user_info SET username='${username}',password='${password}',contact_info='${contact_info}',address='${address}' 
-        WHERE user_id=${targetId};`, (err, result, yield) => {
+        connection.query(`UPDATE user_info SET user_name='${user_name}',password='${password}',telephone='${telephone}',address='${address}' 
+        WHERE user_id=${user_id};`, (err, result, yield) => {
             if (err) {
                 reject(err)
             } else {
@@ -39,8 +39,8 @@ const repairUserInfo = (username, password, contact_info, address, targetId) => 
 //用户信息
 const getAllUser = (searchValue) => {
     const sql = searchValue ?
-        `SELECT user_id,username,password,role,contact_info,address FROM user_info WHERE username LIKE '%${searchValue}' OR username LIKE '${searchValue}%' OR username LIKE '%${searchValue}%';`
-        : `SELECT user_id,username,password,role,contact_info,address FROM user_info;`
+        `SELECT user_id,user_name,password,role,telephone,address FROM user_info WHERE user_name LIKE '%${searchValue}' OR user_name LIKE '${searchValue}%' OR user_name LIKE '%${searchValue}%';`
+        : `SELECT user_id,user_name,password,role,telephone,address FROM user_info;`
     return new Promise((resolve, reject) => {
         connection.query(sql, (err, result, yield) => {
             if (err) {
@@ -65,8 +65,8 @@ const deleteUser = (user_id) => {
     })
 }
 //修改用户信息
-const repairUser = (username, password, role, contact_info, address, user_id) => {
-    const sql = `UPDATE user_info SET username='${username}',password='${password}',role='${role}',contact_info='${contact_info}',address='${address}' WHERE user_id=${user_id};`
+const repairUser = (user_name, password, role, telephone, address, user_id) => {
+    const sql = `UPDATE user_info SET user_name='${user_name}',password='${password}',role='${role}',telephone='${telephone}',address='${address}' WHERE user_id=${user_id};`
     return new Promise((resolve, reject) => {
         connection.query(sql, (err, result, yield) => {
             if (err) {
@@ -254,10 +254,10 @@ const getKucun = (searchValue) => {
 //销售信息
 const getXiaoshou = (searchValue) => {
     const sql = searchValue ?
-        (isNaN(searchValue) ? `SELECT s.sales_id, d.drug_name, u.username, s.sales_date, s.sales_quantity, s.sales_unit_price, s.sales_amount FROM sales_info AS s JOIN drug_info AS d JOIN user_info AS u WHERE d.drug_id IN (s.drug_id) AND u.user_id IN (s.user_id) AND (u.username LIKE '%${searchValue}' OR u.username LIKE '${searchValue}%' OR u.username LIKE '%${searchValue}%' OR d.drug_name LIKE '%${searchValue}' OR d.drug_name LIKE '${searchValue}%' OR d.drug_name LIKE '%${searchValue}%');
+        (isNaN(searchValue) ? `SELECT s.sales_id, d.drug_name, u.user_name, s.sales_date, s.sales_quantity, s.sales_unit_price, s.sales_amount FROM sales_info AS s JOIN drug_info AS d JOIN user_info AS u WHERE d.drug_id IN (s.drug_id) AND u.user_id IN (s.user_id) AND (u.user_name LIKE '%${searchValue}' OR u.user_name LIKE '${searchValue}%' OR u.user_name LIKE '%${searchValue}%' OR d.drug_name LIKE '%${searchValue}' OR d.drug_name LIKE '${searchValue}%' OR d.drug_name LIKE '%${searchValue}%');
     `:
-            `SELECT s.sales_id, d.drug_name, u.username, s.sales_date, s.sales_quantity, s.sales_unit_price, s.sales_amount FROM sales_info AS s JOIN drug_info AS d JOIN user_info AS u WHERE d.drug_id IN (s.drug_id) AND u.user_id IN (s.user_id) AND s.sales_id=${searchValue};`)
-        : 'SELECT s.sales_id, d.drug_name, u.username, s.sales_date, s.sales_quantity, s.sales_unit_price, s.sales_amount FROM sales_info AS s JOIN drug_info AS d JOIN user_info AS u WHERE d.drug_id IN (s.drug_id) AND u.user_id IN (s.user_id);'
+            `SELECT s.sales_id, d.drug_name, u.user_name, s.sales_date, s.sales_quantity, s.sales_unit_price, s.sales_amount FROM sales_info AS s JOIN drug_info AS d JOIN user_info AS u WHERE d.drug_id IN (s.drug_id) AND u.user_id IN (s.user_id) AND s.sales_id=${searchValue};`)
+        : 'SELECT s.sales_id, d.drug_name, u.user_name, s.sales_date, s.sales_quantity, s.sales_unit_price, s.sales_amount FROM sales_info AS s JOIN drug_info AS d JOIN user_info AS u WHERE d.drug_id IN (s.drug_id) AND u.user_id IN (s.user_id);'
     return new Promise((resolve, reject) => {
         connection.query(sql, (err, result, yield) => {
             if (err) {
@@ -271,11 +271,11 @@ const getXiaoshou = (searchValue) => {
 //入库信息
 const getRuku = (searchValue) => {
     const sql = searchValue ?
-        (isNaN(searchValue) ? `SELECT p.purchase_id,p.user_id,u.username,p.purchase_date,p.purchase_total_amount,p.note FROM purchase_order AS p JOIN user_info AS u WHERE p.user_id=u.user_id AND (u.username LIKE '%${searchValue}' OR u.username LIKE '${searchValue}%' OR u.username LIKE '%${searchValue}%');
+        (isNaN(searchValue) ? `SELECT p.purchase_id,p.user_id,u.user_name,p.purchase_date,p.purchase_total_amount,p.note FROM purchase_order AS p JOIN user_info AS u WHERE p.user_id=u.user_id AND (u.user_name LIKE '%${searchValue}' OR u.user_name LIKE '${searchValue}%' OR u.user_name LIKE '%${searchValue}%');
     `:
-            `SELECT p.purchase_id,p.user_id,u.username,p.purchase_date,p.purchase_total_amount,p.note FROM purchase_order AS p JOIN user_info AS u WHERE p.user_id=u.user_id AND p.purchase_id=2;
+            `SELECT p.purchase_id,p.user_id,u.user_name,p.purchase_date,p.purchase_total_amount,p.note FROM purchase_order AS p JOIN user_info AS u WHERE p.user_id=u.user_id AND p.purchase_id=2;
     `)
-        : 'SELECT p.purchase_id,p.user_id,u.username,p.purchase_date,p.purchase_total_amount,p.note FROM purchase_order AS p JOIN user_info AS u WHERE p.user_id=u.user_id;'
+        : 'SELECT p.purchase_id,p.user_id,u.user_name,p.purchase_date,p.purchase_total_amount,p.note FROM purchase_order AS p JOIN user_info AS u WHERE p.user_id=u.user_id;'
     return new Promise((resolve, reject) => {
         connection.query(sql, (err, result, yield) => {
             if (err) {

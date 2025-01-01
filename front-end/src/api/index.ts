@@ -13,7 +13,7 @@ serviceAxios.interceptors.request.use(
   (config) => {
     // 如果开启 token 认证
     // if (false) {
-    //   config.headers["Authorization"] = localStorage.getItem("token"); // 请求头携带 token
+      config.headers["Token"] = localStorage.getItem("token"); // 请求头携带 Token
     // }
     // 设置请求头
     if (!config.headers["content-type"]) { // 如果没有设置请求头
@@ -30,13 +30,16 @@ serviceAxios.interceptors.request.use(
 // 创建响应拦截
 serviceAxios.interceptors.response.use(
   (res) => {
-    const { data } = res;
+    
+    const { data, headers } = res;  // 获取响应数据和响应头
+    const token = headers['token'] || headers['x-auth-token'];  // 根据服务器返回的 header 名称获取 token
+    localStorage.setItem('token',token);
     // 处理自己的业务逻辑，比如判断 token 是否过期等等
     // 代码块
     return data;
   },
   (error) => {
-    console.log(error.response.data.data.msg);
+    if(error.response.data.data.msg.includes('token'))window.location.href = 'http://localhost:5173/'
     message.warning(error.response.data.data.msg);
     return Promise.reject(error.response.data.data.msg);
   }

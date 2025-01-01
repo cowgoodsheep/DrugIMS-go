@@ -1,12 +1,12 @@
 import serviceAxios from ".";
-let user_id, username, password, contact_info, address
+let user_id, user_name, password, telephone, address
 let userinfo = localStorage.getItem('userinfo')
 if ((userinfo)) {
   userinfo = JSON.parse(userinfo)
   user_id = userinfo.user_id
-  username = userinfo.username
+  user_name = userinfo.user_name
   password = userinfo.password
-  contact_info = userinfo.contact_info
+  telephone = userinfo.telephone
   address = userinfo.address
 }
 
@@ -24,11 +24,11 @@ export const login = async (postData) => {
 
 // 修改个人信息
 export const repairUserInfo = async (postData) => {
-  postData.username = postData.username || username
+  postData.user_name = postData.user_name || user_name
   postData.password = postData.password || password
-  postData.contact_info = postData.contact_info || contact_info
+  postData.telephone = postData.telephone || telephone
   postData.address = postData.address || address
-  const data = await serviceAxios.post('/user/setUserInfo', { ...postData, targetId: user_id })
+  const data = await serviceAxios.post('/user/update', { ...postData, user_id: user_id })
   return data
 }
 
@@ -86,11 +86,11 @@ export const getAllUser = async (searchValue) => {
 
 // 修改用户信息
 export const repairUser = async (postData) => {
-  const { username, password, role, contact_info, address, user_id } = JSON.parse(localStorage.getItem('userMsg'))
-  postData.username = postData.username || username
+  const { user_name, password, role, telephone, address, user_id } = JSON.parse(localStorage.getItem('userMsg'))
+  postData.user_name = postData.user_name || user_name
   postData.password = postData.password || password
   postData.role = postData.role || role
-  postData.contact_info = postData.contact_info || contact_info
+  postData.telephone = postData.telephone || telephone
   postData.address = postData.address || address
   postData.user_id = postData.user_id || user_id
   console.log(postData)

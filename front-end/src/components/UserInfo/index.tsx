@@ -18,12 +18,12 @@ const handelClick = () => {
   <Card title="个人基本信息">
     <Card.Grid style={gridStyle} className='B'>用户名：</Card.Grid>
     <Card.Grid hoverable={false} style={gridStyle} >
-      {userInfo.username}
+      {userInfo.user_name}
     </Card.Grid>
     <Card.Grid className='B' style={gridStyle}>角色：</Card.Grid>
     <Card.Grid hoverable={false} style={gridStyle}>{userInfo.role}</Card.Grid>
-    <Card.Grid className='B' style={gridStyle}>联系方式：</Card.Grid>
-    <Card.Grid  hoverable={false} style={gridStyle}>{userInfo.contact_info}</Card.Grid>
+    <Card.Grid className='B' style={gridStyle}>电话号：</Card.Grid>
+    <Card.Grid  hoverable={false} style={gridStyle}>{userInfo.telephone}</Card.Grid>
     <Card.Grid className='B' style={gridStyle}>地址：</Card.Grid>
     <Card.Grid hoverable={false} style={gridStyle}>{userInfo.address}</Card.Grid>
   </Card>

@@ -21,9 +21,9 @@ func MakeToken(telephone string) (tokenString string, err error) {
 	claim := Claims{
 		Telephone: telephone,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(24 * time.Hour).Unix(), //过期时间
-			IssuedAt:  time.Now().Unix(),                     //签发时间
-			NotBefore: time.Now().Unix(),                     //生效时间
+			ExpiresAt: time.Now().Add(24 * time.Hour).Unix(), // 过期时间
+			IssuedAt:  time.Now().Unix(),                      // 签发时间
+			NotBefore: time.Now().Unix(),                      // 生效时间
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claim)
@@ -33,14 +33,14 @@ func MakeToken(telephone string) (tokenString string, err error) {
 
 // 解析token
 func ParseToken(tokenString string) (*Claims, bool) {
-	//调用jwt.ParseWithClaims函数来解析JWT Token
-	//该函数接受三个参数：待解析的Token字符串、声明信息的结构体指针（&Claims{}）、以及一个回调函数
+	// 调用jwt.ParseWithClaims函数来解析JWT Token
+	// 该函数接受三个参数：待解析的Token字符串、声明信息的结构体指针（&Claims{}）、以及一个回调函数
 	token, _ := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		return MySecret, nil
 	})
 	if token != nil {
 		if key, ok := token.Claims.(*Claims); ok == true {
-			//如果token无效，则返回错误
+			// 如果token无效，则返回错误
 			if token.Valid == false {
 				return key, false
 			} else {
@@ -48,25 +48,31 @@ func ParseToken(tokenString string) (*Claims, bool) {
 			}
 		}
 	}
-	//如果token为空，则解析过程发生错误
+	// 如果token为空，则解析过程发生错误
 	return nil, false
 }
 
 // jwt鉴权中间件,设置telephone
 func JWTMiddleWare() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		//从请求的查询参数中获取token
-		tokenString := c.Query("token")
-		//如果找不到，就去Form表单去找
-		if tokenString == "" {
-			tokenString = c.PostForm("token")
+		// 前端请求没带Token
+		if c.Request.Header["Token"] == nil || len(c.Request.Header["Token"]) == 0 {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"code": 401,
+				"data": gin.H{
+					"msg": "token为空",
+				},
+			})
+			c.Abort() // 验证失败，跳过后续操作
+			return
 		}
+		tokenString := c.Request.Header["Token"][0]
 		//如果用户不存在
 		if tokenString == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"code": 401,
 				"data": gin.H{
-					"msg": "用户不存在",
+					"msg": "token为空",
 				},
 			})
 			c.Abort() //验证失败，跳过后续操作

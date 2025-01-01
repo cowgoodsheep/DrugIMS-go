@@ -57,9 +57,9 @@ export default function MyModel() {
       switch (type) {
         case 0:
           return (<>
-            <FormItem label='用户名' name='username'></FormItem>
+            <FormItem label='用户名' name='user_name'></FormItem>
             <FormItem label='密码' name='password'></FormItem>
-            <FormItem label='联系方式' name='contact_info'></FormItem>
+            <FormItem label='电话号' name='telephone'></FormItem>
             <FormItem label='地址' name='address'></FormItem>
           </>)
         case 1:
@@ -98,7 +98,7 @@ export default function MyModel() {
               </>)
                case 4:
                 return (<>
-                  <FormItem label='用户名' name='username'  type='string'></FormItem>
+                  <FormItem label='用户名' name='user_name'  type='string'></FormItem>
                   <FormItem label='密码' name='password'  type='string'></FormItem>
                   <Form.Item label="角色" name='role'>
         <Select>
@@ -107,7 +107,7 @@ export default function MyModel() {
           <Select.Option value="管理员">管理员</Select.Option>
         </Select>
       </Form.Item>
-                  <FormItem label='联系方式' name='contact_info'  type='string'></FormItem>
+                  <FormItem label='电话号' name='telephone'  type='string'></FormItem>
                   <FormItem label='地址' name='address' type='string'></FormItem>
                 </>)
         default:

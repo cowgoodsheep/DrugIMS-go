@@ -18,8 +18,8 @@ const columns = [
     },
     {
         title: '用户名',
-        dataIndex: 'username',
-        key: 'username',
+        dataIndex: 'user_name',
+        key: 'user_name',
         width: 100
     },
     {
