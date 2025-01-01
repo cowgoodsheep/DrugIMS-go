@@ -1,0 +1,15 @@
+#MySQL配置
+[mysql]
+host = "127.0.0.1"
+port = 3306
+database = "drug"
+username = "root"
+password = "123456"
+charset = "utf8mb4"
+parse_time = true
+local = "Local"
+
+#服务器配置
+[server]
+ip = "127.0.0.1"
+port = 8080
