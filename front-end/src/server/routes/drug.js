@@ -1,10 +1,10 @@
 
 var express = require('express');
-var {getValue,getMax,getAllDrug,addDrug,buyDrug,jinhuo,repairDrug,deleteDrug}= require('../api/index');
+var {getValue,getMax,getDrugList,addDrug,buyDrug,jinhuo,repairDrug,deleteDrug}= require('../api/index');
 var router = express.Router();
 router.post('/getAll', async(req, res, next) => {
     const {searchValue} = req.body
-  const data =await getAllDrug(searchValue)
+  const data =await getDrugList(searchValue)
     res.json(data);
   });
   router.post('/addDrug', async(req, res, next) => {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import {  Space, Tag,InputNumber, message,Popconfirm,Button ,Tooltip} from 'antd';
 import MyTable from '../MyTable';
-import { getAllDrug,buyDrug,deleteDrug,getValue,getMax } from '../../api/Api';
+import { getDrugList,buyDrug,deleteDrug,getValue,getMax } from '../../api/Api';
 import { useModel } from '../../utils';
 export default function Drug({ searchValue }:{searchValue:string}) {
     const [loading, setLoading] = useState(false)
@@ -119,7 +119,7 @@ cancelText="No"
     }, [searchValue])
     const getData =async(searchValue = '') => {
         setLoading(true)
-         const data = await getAllDrug(searchValue)
+         const data = await getDrugList(searchValue)
          const promises = data.map(async item => {
             const value = await getValue(item.drug_id);
             if(!item.drug_description||item.drug_description==='null'){

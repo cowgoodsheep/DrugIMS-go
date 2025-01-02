@@ -57,7 +57,7 @@ func UserRegister(c *gin.Context) {
 
 // 用户登录
 func UserLogin(c *gin.Context) {
-	//获取用户登录信息
+	// 获取用户登录信息
 	var u model.UserInfo
 	if err := c.ShouldBindJSON(&u); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -80,7 +80,7 @@ func UserLogin(c *gin.Context) {
 	} else {
 		u.Password = password
 	}
-	//获取用户流信息
+	// 获取用户流信息
 	loginMsg, err := logic.LoginUser(&u)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -98,13 +98,13 @@ func UserLogin(c *gin.Context) {
 		"password":  loginMsg.UserInfo.Password,
 		"role":      loginMsg.UserInfo.Role,
 		"user_id":   loginMsg.UserInfo.UserId,
-		"user_name":  loginMsg.UserInfo.UserName,
+		"user_name": loginMsg.UserInfo.UserName,
 	}})
 }
 
 // 用户信息更新
 func UserUpdate(c *gin.Context) {
-	//获取用户信息
+	// 获取用户信息
 	var u model.UserInfo
 	if err := c.ShouldBindJSON(&u); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -115,7 +115,7 @@ func UserUpdate(c *gin.Context) {
 		})
 		return
 	}
-	//获取用户流信息
+	// 获取用户流信息
 	_, err := logic.UpdateUser(&u)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -126,5 +126,28 @@ func UserUpdate(c *gin.Context) {
 		})
 		return
 	}
+	c.JSON(http.StatusOK, nil)
+}
+
+// 获取用户列表
+func GetUserList(c *gin.Context) {
+	userList := model.GetUserList()
+	c.JSON(http.StatusOK, userList)
+}
+
+// 删除用户
+func UserDelete(c *gin.Context) {
+	// 获取用户信息
+	var u model.UserInfo
+	if err := c.ShouldBindJSON(&u); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code": 400,
+			"data": gin.H{
+				"msg": err.Error(),
+			},
+		})
+		return
+	}
+	model.DeleteUser(u.UserId)
 	c.JSON(http.StatusOK, nil)
 }

@@ -14,7 +14,7 @@ type UserInfo struct {
 	Description string `json:"description"` // 描述
 	Avatar      string `json:"avatar"`      // 头像
 	Address     string `json:"address"`     // 地址
-	Role        string `json:"role"`        // 用户角色，1:管理员;2:客户;3:供应商
+	Role        string `json:"role"`        // 用户角色，管理员;客户;供应商
 	Status      int8   `json:"status"`      // 用户状态，1:正常;2:禁用
 }
 
@@ -71,4 +71,16 @@ func QueryUserByUserName(userName string) *UserInfo {
 // UpdateUserInfo 更新用户数据
 func UpdateUserInfo(userId int32, userInfo *UserInfo) {
 	dao.DB.Model(&UserInfo{}).Where("user_id = ?", userId).Updates(userInfo)
+}
+
+// GetUserList 获取用户列表
+func GetUserList() *[]UserInfo {
+	var uListFind []UserInfo
+	dao.DB.Where("status = ?", 1).Find(&uListFind)
+	return &uListFind
+}
+
+// DeleteUser 删除用户
+func DeleteUser(userId int32) {
+	dao.DB.Model(&UserInfo{}).Where("user_id = ?", userId).Update("status", 2)
 }

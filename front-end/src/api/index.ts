@@ -33,7 +33,7 @@ serviceAxios.interceptors.response.use(
     
     const { data, headers } = res;  // 获取响应数据和响应头
     const token = headers['token'] || headers['x-auth-token'];  // 根据服务器返回的 header 名称获取 token
-    localStorage.setItem('token',token);
+    if(token)localStorage.setItem('token',token);
     // 处理自己的业务逻辑，比如判断 token 是否过期等等
     // 代码块
     return data;

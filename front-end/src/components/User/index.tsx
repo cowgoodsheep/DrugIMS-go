@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import {  Space, Tag,Popconfirm,Button } from 'antd';
 import MyTable from '../MyTable';
-import { deleteUser, getAllUser } from '../../api/Api';
+import { deleteUser, getUserList } from '../../api/Api';
 import { useModel } from '../../utils';
 
 export default function PublicDb({ searchValue }:{searchValue:string}) {
@@ -16,7 +16,7 @@ export default function PublicDb({ searchValue }:{searchValue:string}) {
     }, [searchValue])
     const getData =async (searchValue = '') => {
         setLoading(false)
-        const data = await getAllUser(searchValue)
+        const data = await getUserList(searchValue)
         setLoading(false)
        setData(data)
     }

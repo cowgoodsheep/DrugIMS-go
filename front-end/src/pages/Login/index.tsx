@@ -103,8 +103,8 @@ const Page = () => {
               placeholder="请选择"
               allowClear
             >
-              <Option value="2">客户</Option>
-              <Option value="3">供应商</Option>
+              <Option value="客户">客户</Option>
+              <Option value="供应商">供应商</Option>
             </Select>
           </Form.Item>
           <Form.Item wrapperCol={{ offset: 10, span: 16 }} >

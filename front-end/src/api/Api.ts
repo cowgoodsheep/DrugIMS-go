@@ -23,18 +23,35 @@ export const login = async (postData) => {
 }
 
 // 修改个人信息
-export const repairUserInfo = async (postData) => {
-  postData.user_name = postData.user_name || user_name
-  postData.password = postData.password || password
-  postData.telephone = postData.telephone || telephone
-  postData.address = postData.address || address
+export const updateUserInfo = async (postData) => {
+  postData.user_name = postData.user_name
+  postData.password = postData.password
+  postData.telephone = postData.telephone
+  postData.address = postData.address
   const data = await serviceAxios.post('/user/update', { ...postData, user_id: user_id })
   return data
 }
 
+// 管理员修改用户信息
+export const adminUpdateUser = async (postData) => {
+  postData.user_name = postData.user_name
+  postData.password = postData.password
+  postData.role = postData.role
+  postData.telephone = postData.telephone
+  postData.address = postData.address
+  const data = await serviceAxios.post('/user/update', { ...postData, user_id: user_id })
+  return data
+}
+
+// 删除用户信息
+export const deleteUser = async (user_id) => {
+  const data = await serviceAxios.post('/user/delete', { user_id })
+  return data
+}
+
 // 药品信息
-export const getAllDrug = async (searchValue) => {
-  const data = await serviceAxios.post('/drug/getAll', { searchValue })
+export const getDrugList = async (searchValue) => {
+  const data = await serviceAxios.post('/drug/getDrugList', { searchValue })
   return data
 }
 export const addDrug = async (postData) => {
@@ -79,28 +96,8 @@ export const getValue = async (drug_id) => {
 }
 
 // 用户信息
-export const getAllUser = async (searchValue) => {
-  const data = await serviceAxios.post('/user/getAllUser', { searchValue })
-  return data
-}
-
-// 修改用户信息
-export const repairUser = async (postData) => {
-  const { user_name, password, role, telephone, address, user_id } = JSON.parse(localStorage.getItem('userMsg'))
-  postData.user_name = postData.user_name || user_name
-  postData.password = postData.password || password
-  postData.role = postData.role || role
-  postData.telephone = postData.telephone || telephone
-  postData.address = postData.address || address
-  postData.user_id = postData.user_id || user_id
-  console.log(postData)
-  const data = await serviceAxios.post('/user/repairUser', postData)
-  return data
-}
-
-// 删除用户信息
-export const deleteUser = async (user_id) => {
-  const data = await serviceAxios.post('/user/deleteUser', { user_id })
+export const getUserList = async (searchValue) => {
+  const data = await serviceAxios.post('/user/getUserList', { searchValue })
   return data
 }
 

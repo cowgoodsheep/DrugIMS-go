@@ -41,26 +41,25 @@ func SetupRouter() *gin.Engine {
 		userGroup.POST("/login", controller.UserLogin)
 		// 更新用户信息
 		userGroup.POST("/update", middleware.JWTMiddleWare(), controller.UserUpdate)
-
-		// // 获取全部用户
-		// userGroup.POST("/getAll")
-		// // 用户注销(软删除)
-		// userGroup.POST("/delete")
+		// 获取用户列表
+		userGroup.POST("/getUserList", middleware.JWTMiddleWare(), controller.GetUserList)
+		// 用户注销(软删除)
+		userGroup.POST("/delete", middleware.JWTMiddleWare(), controller.UserDelete)
 	}
 
-	// // 药品路由组
-	// drugGroup := r.Group("/drug")
-	// {
-	// 	// 获取全部药品
-	// 	userGroup.POST("/getAll")
-	// 	// 创建药品
-	// 	userGroup.POST("/create")
-	// 	// 删除药品
-	// 	userGroup.POST("/delete")
-	// 	// 购买药品
-	// 	userGroup.POST("/buy")
-	// 	// 进货
-	// 	userGroup.POST("/provide")
-	// }
+	// 药品路由组
+	drugGroup := r.Group("/drug")
+	{
+		// 获取全部药品
+		drugGroup.POST("/getDrugList", middleware.JWTMiddleWare(), controller.GetDrugList)
+		// // 创建药品
+		// drugGroup.POST("/create")
+		// // 删除药品
+		// drugGroup.POST("/delete")
+		// // 购买药品
+		// drugGroup.POST("/buy")
+		// // 进货
+		// drugGroup.POST("/provide")
+	}
 	return r
 }

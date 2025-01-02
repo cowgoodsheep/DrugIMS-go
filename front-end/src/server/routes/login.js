@@ -1,5 +1,5 @@
 var express = require('express');
-var {register,login,repairUserInfo}= require('../api/index');
+var {register,login,updateUserInfo}= require('../api/index');
 var router = express.Router();
 router.post('/register', async(req, res, next) => {
     const {user_name,password,role} = req.body;

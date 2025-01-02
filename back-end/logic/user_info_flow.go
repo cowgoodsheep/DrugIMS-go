@@ -134,8 +134,11 @@ func (u *UserInfoFlow) loginUserCheck() error {
 func (u *UserInfoFlow) loginUser() error {
 	// 从数据库中寻找用户
 	userInfo := model.QueryUserByTelephone(u.UserInfo.Telephone)
-	if userInfo.UserId == 0 {
+	if userInfo.UserId == 0 { // 手机号找不到就用用户名
 		userInfo = model.QueryUserByUserName(u.UserInfo.UserName)
+	}
+	if userInfo.UserId == 0 { // 都找不到就报错
+		return errors.New("找不到该用户")
 	}
 	if userInfo.Password != u.UserInfo.Password {
 		return errors.New("密码错误")
@@ -195,6 +198,9 @@ func (u *UserInfoFlow) updateUser() error {
 	}
 	if u.UserInfo.Address == "" {
 		u.UserInfo.Address = tu.Address
+	}
+	if u.UserInfo.Role == "" {
+		u.UserInfo.Role = tu.Role
 	}
 	model.UpdateUserInfo(u.UserInfo.UserId, u.UserInfo)
 	return nil

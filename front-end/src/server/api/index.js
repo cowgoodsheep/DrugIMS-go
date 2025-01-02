@@ -24,7 +24,7 @@ const login = (user_name, password) => {
     })
 }
 //个人信息
-const repairUserInfo = (user_name, password, telephone, address, user_id) => {
+const updateUserInfo = (user_name, password, telephone, address, user_id) => {
     return new Promise((resolve, reject) => {
         connection.query(`UPDATE user_info SET user_name='${user_name}',password='${password}',telephone='${telephone}',address='${address}' 
         WHERE user_id=${user_id};`, (err, result, yield) => {
@@ -37,7 +37,7 @@ const repairUserInfo = (user_name, password, telephone, address, user_id) => {
     })
 }
 //用户信息
-const getAllUser = (searchValue) => {
+const getUserList = (searchValue) => {
     const sql = searchValue ?
         `SELECT user_id,user_name,password,role,telephone,address FROM user_info WHERE user_name LIKE '%${searchValue}' OR user_name LIKE '${searchValue}%' OR user_name LIKE '%${searchValue}%';`
         : `SELECT user_id,user_name,password,role,telephone,address FROM user_info;`
@@ -65,7 +65,7 @@ const deleteUser = (user_id) => {
     })
 }
 //修改用户信息
-const repairUser = (user_name, password, role, telephone, address, user_id) => {
+const updateUser = (user_name, password, role, telephone, address, user_id) => {
     const sql = `UPDATE user_info SET user_name='${user_name}',password='${password}',role='${role}',telephone='${telephone}',address='${address}' WHERE user_id=${user_id};`
     return new Promise((resolve, reject) => {
         connection.query(sql, (err, result, yield) => {
@@ -78,7 +78,7 @@ const repairUser = (user_name, password, role, telephone, address, user_id) => {
     })
 }
 //药品信息
-const getAllDrug = (searchValue = '') => {
+const getDrugList = (searchValue = '') => {
     const sql = searchValue ?
         (isNaN(searchValue) ? `SELECT * FROM drug_info WHERE (drug_name LIKE '${searchValue}%') OR (drug_name LIKE '%${searchValue}') OR (drug_name LIKE '%${searchValue}%');` :
             `SELECT * FROM drug_info WHERE drug_id = ${searchValue};`)
@@ -323,5 +323,5 @@ const getMyBuy = (user_id, searchValue) => {
     })
 }
 module.exports = {
-    getValue, getMax, getMyRuku, repairUser, deleteUser, getAllUser, deleteDrug, repairDrug, jinhuo, buyDrug, addDrug, getMyBuy, register, login, repairUserInfo, getAllDrug, getKucun, getXiaoshou, getRuku
+    getValue, getMax, getMyRuku, updateUser, deleteUser, getUserList, deleteDrug, repairDrug, jinhuo, buyDrug, addDrug, getMyBuy, register, login, updateUserInfo, getDrugList, getKucun, getXiaoshou, getRuku
 }

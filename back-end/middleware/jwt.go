@@ -22,8 +22,8 @@ func MakeToken(telephone string) (tokenString string, err error) {
 		Telephone: telephone,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(24 * time.Hour).Unix(), // 过期时间
-			IssuedAt:  time.Now().Unix(),                      // 签发时间
-			NotBefore: time.Now().Unix(),                      // 生效时间
+			IssuedAt:  time.Now().Unix(),                     // 签发时间
+			NotBefore: time.Now().Unix(),                     // 生效时间
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claim)
@@ -67,7 +67,7 @@ func JWTMiddleWare() gin.HandlerFunc {
 			return
 		}
 		tokenString := c.Request.Header["Token"][0]
-		//如果用户不存在
+		// 如果用户不存在
 		if tokenString == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"code": 401,
@@ -75,10 +75,10 @@ func JWTMiddleWare() gin.HandlerFunc {
 					"msg": "token为空",
 				},
 			})
-			c.Abort() //验证失败，跳过后续操作
+			c.Abort() // 验证失败，跳过后续操作
 			return
 		}
-		//验证token是否正确
+		// 验证token是否正确
 		claims, ok := ParseToken(tokenString)
 		if !ok {
 			c.JSON(http.StatusForbidden, gin.H{
@@ -87,10 +87,10 @@ func JWTMiddleWare() gin.HandlerFunc {
 					"msg": "token错误",
 				},
 			})
-			c.Abort() //验证失败，跳过后续操作
+			c.Abort() // 验证失败，跳过后续操作
 			return
 		}
-		//token过期了
+		// token过期了
 		if time.Now().Unix() > claims.ExpiresAt {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"code": 401,
@@ -98,10 +98,10 @@ func JWTMiddleWare() gin.HandlerFunc {
 					"msg": "token过期",
 				},
 			})
-			c.Abort() //验证失败，跳过后续操作
+			c.Abort() // 验证失败，跳过后续操作
 			return
 		}
-		//token验证成功，返回用户手机号
+		// token验证成功，返回用户手机号
 		c.Set("telephone", claims.Telephone)
 		c.Next()
 	}
