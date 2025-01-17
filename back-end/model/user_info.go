@@ -28,13 +28,13 @@ func CreateUser(u *UserInfo) error {
 	if u == nil {
 		return errors.New("空指针错误")
 	}
-	return dao.DB.Debug().Create(u).Error
+	return dao.DB.Model(&UserInfo{}).Create(u).Error
 }
 
 // 根据手机号判断该用户是否存在
 func IsUserExistByTelephone(telephone string) bool {
 	var u UserInfo
-	dao.DB.Where("telephone=?", telephone).Where("status=?", 1).First(&u)
+	dao.DB.Model(&UserInfo{}).Where("telephone=?", telephone).Where("status=?", 1).First(&u)
 	//如果找不到
 	return u.UserId != 0
 }
@@ -42,7 +42,7 @@ func IsUserExistByTelephone(telephone string) bool {
 // 根据用户名判断该用户是否存在
 func IsUserExistByUserName(userName string) bool {
 	var u UserInfo
-	dao.DB.Where("user_name=?", userName).Where("status=?", 1).First(&u)
+	dao.DB.Model(&UserInfo{}).Where("user_name=?", userName).Where("status=?", 1).First(&u)
 	//如果找不到
 	return u.UserId != 0
 }
@@ -50,21 +50,21 @@ func IsUserExistByUserName(userName string) bool {
 // QueryUserByUserId 用id寻找用户
 func QueryUserByUserId(userId int32) *UserInfo {
 	var uFind UserInfo
-	dao.DB.Where("user_id=?", userId).Where("status=?", 1).First(&uFind)
+	dao.DB.Model(&UserInfo{}).Where("user_id=?", userId).Where("status=?", 1).First(&uFind)
 	return &uFind
 }
 
 // QueryUserByTelephone 用手机号寻找用户
 func QueryUserByTelephone(telephone string) *UserInfo {
 	var uFind UserInfo
-	dao.DB.Where("telephone=?", telephone).Where("status=?", 1).First(&uFind)
+	dao.DB.Model(&UserInfo{}).Where("telephone=?", telephone).Where("status=?", 1).First(&uFind)
 	return &uFind
 }
 
 // QueryUserByUserName 用用户名寻找用户
 func QueryUserByUserName(userName string) *UserInfo {
 	var uFind UserInfo
-	dao.DB.Where("user_name=?", userName).Where("status=?", 1).First(&uFind)
+	dao.DB.Model(&UserInfo{}).Where("user_name=?", userName).Where("status=?", 1).First(&uFind)
 	return &uFind
 }
 
@@ -73,10 +73,10 @@ func UpdateUserInfo(userId int32, userInfo *UserInfo) {
 	dao.DB.Model(&UserInfo{}).Where("user_id = ?", userId).Updates(userInfo)
 }
 
-// GetUserList 获取用户列表
-func GetUserList() *[]UserInfo {
+// LikeGetUserListByUserName 获取根据用户名称模模糊查询用户列表
+func LikeGetUserListByUserName(userName string) *[]UserInfo {
 	var uListFind []UserInfo
-	dao.DB.Where("status = ?", 1).Find(&uListFind)
+	dao.DB.Model(&UserInfo{}).Where("user_name LIKE ?", "%"+userName+"%").Find(&uListFind)
 	return &uListFind
 }
 

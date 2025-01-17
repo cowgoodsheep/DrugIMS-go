@@ -1,8 +1,12 @@
 package router
 
 import (
+	"bytes"
 	"drugims/controller"
 	"drugims/middleware"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,11 +28,33 @@ func corsMiddleware() gin.HandlerFunc {
 	}
 }
 
+// printRequestBodyMiddleware 中间件用于打印请求体
+func printRequestBodyMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// 读取请求体
+		body, err := ioutil.ReadAll(c.Request.Body)
+		if err != nil {
+			fmt.Println("读取请求体失败:", err)
+			c.AbortWithStatus(http.StatusBadRequest)
+			return
+		}
+
+		// 将请求体内容打印到控制台
+		fmt.Println("请求体内容:", string(body))
+
+		// 重新设置请求体，以便后续处理可以再次读取
+		c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(body))
+
+		// 继续处理请求
+		c.Next()
+	}
+}
+
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
 
-	// 设置跨域访问处理中间件
-	r.Use(corsMiddleware())
+	// 设置跨域访问处理、debug中间件
+	r.Use(corsMiddleware(), printRequestBodyMiddleware())
 
 	// Home主页
 	r.GET("/home", controller.Home)

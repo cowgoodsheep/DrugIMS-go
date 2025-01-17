@@ -4,6 +4,7 @@ import (
 	"drugims/logic"
 	"drugims/middleware"
 	"drugims/model"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -131,7 +132,19 @@ func UserUpdate(c *gin.Context) {
 
 // 获取用户列表
 func GetUserList(c *gin.Context) {
-	userList := model.GetUserList()
+	// 获取查询字段
+	var searchValue interface{}
+	if err := c.ShouldBindJSON(&searchValue); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code": 400,
+			"data": gin.H{
+				"msg": err.Error(),
+			},
+		})
+		return
+	}
+	search := fmt.Sprintf("%v", searchValue)
+	userList := model.LikeGetUserListByUserName(search)
 	c.JSON(http.StatusOK, userList)
 }
 
