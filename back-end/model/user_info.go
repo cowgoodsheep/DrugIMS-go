@@ -74,10 +74,10 @@ func UpdateUserInfo(userId int32, userInfo *UserInfo) {
 }
 
 // LikeGetUserListByUserName 获取根据用户名称模模糊查询用户列表
-func LikeGetUserListByUserName(userName string) *[]UserInfo {
-	var uListFind []UserInfo
+func LikeGetUserListByUserName(userName string) []*UserInfo {
+	var uListFind []*UserInfo
 	dao.DB.Model(&UserInfo{}).Where("user_name LIKE ?", "%"+userName+"%").Find(&uListFind)
-	return &uListFind
+	return uListFind
 }
 
 // DeleteUser 删除用户

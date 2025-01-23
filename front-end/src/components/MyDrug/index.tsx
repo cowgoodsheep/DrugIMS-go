@@ -7,8 +7,8 @@ import { addOneDay } from '../../utils';
 const columns = [
     {
         title: '订单号',
-        dataIndex: 'sales_id',
-        key: 'sales_id',
+        dataIndex: 'sale_id',
+        key: 'sale_id',
         fixed: 'left',
         width: 100
     },
@@ -21,20 +21,20 @@ const columns = [
     },
     {
         title: '购买日期',
-        dataIndex: 'sales_date',
-        key: 'sales_date',
+        dataIndex: 'sale_date',
+        key: 'sale_date',
         width: 100
     },
     {
         title: '数量',
-        dataIndex: 'sales_quantity',
-        key: 'sales_quantity',
+        dataIndex: 'sale_quantity',
+        key: 'sale_quantity',
         width: 100
     },
     {
         title: '金额',
-        dataIndex: 'sales_amount',
-        key: 'sales_amount',
+        dataIndex: 'sale_amount',
+        key: 'sale_amount',
         width: 100
     },
 ];
@@ -52,7 +52,7 @@ export default function PublicDb({ searchValue }:{searchValue:string}) {
         setLoading(false)
         const data = await getAllBuy(searchValue)
         data.map((v,i)=>{
-            data[i].sales_date = addOneDay(data[i].sales_date.split('T')[0])
+            data[i].sale_date = addOneDay(data[i].sale_date.split('T')[0])
         })
         setLoading(false)
        setData(data)

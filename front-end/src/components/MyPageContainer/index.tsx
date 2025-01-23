@@ -9,12 +9,12 @@ import {
   ProCard,
 } from '@ant-design/pro-components';
 import SearchInputList from './SearchInputList';
-import MyModel from '../MyModel';
+import MyModel from '../ShowModel';
 import AuList from '../AuList';
 import UserInfo from '../UserInfo';
-import Drug from '../Drug';
+import Drug from '../DrugList';
 import MyDrug from '../MyDrug';
-import Kucun from '../KuCun'
+import Kucun from '../Stock'
 import Sell from '../Sell';
 import Ruku from '../Ruku'
 import User from '../User'
@@ -126,10 +126,10 @@ const MyPageContainer = ({ pathname }:{[key:string]:string}) => {
           }}
         >
             {which === 'drug' ? <Drug searchValue={searchValue} /> :
-            which === 'myDrug' ? <MyDrug searchValue={searchValue} /> :
-            which === 'inventory' ? <Kucun searchValue={searchValue} /> :
-            which === 'sellMsg' ? <Sell searchValue={searchValue} /> :
-            which === 'addMsg' ? <Ruku searchValue={searchValue} /> :
+            which === 'myBuyRecord' ? <MyDrug searchValue={searchValue} /> :
+            which === 'stock' ? <Kucun searchValue={searchValue} /> :
+            which === 'saleInfo' ? <Sell searchValue={searchValue} /> :
+            which === 'purchaseInfo' ? <Ruku searchValue={searchValue} /> :
           which === 'user' ? <User searchValue={searchValue} /> :
           which === 'myinput' ? <MyRuku searchValue={searchValue} change={temp}/> :
           <UserInfo/>}

@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState:{open:boolean,type:number,titleMap:{[key:number]:string}} = {
 	open:false,
     type:0,
-	max:99999,
+	max:2147483647,
 	titleMap:{0:'修改信息',1:'添加药品信息',2:"药品入库",3:'修改药品信息',4:'修改用户信息'}
 }
 const countSlice = createSlice({

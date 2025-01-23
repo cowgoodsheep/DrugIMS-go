@@ -25,23 +25,23 @@ const defaultProps = {
             },
             {
                 name: '药品库存',
-                path: '/inventory',
+                path: '/stock',
                 hideInMenu:role!=='管理员'
             },    {
                 name: '销售信息',
-                path: '/sellMsg',
+                path: '/saleInfo',
                 hideInMenu:role!=='管理员'
 
             }, 
             {
                 name: '入库信息',
-                path: '/addMsg',
+                path: '/purchaseInfo',
                 hideInMenu:role!=='管理员'
 
             }, 
             {
                 name: '我的购买记录',
-                path: '/myDrug',
+                path: '/myBuyRecord',
                 hideInMenu:role!=='客户'
             }, 
             {

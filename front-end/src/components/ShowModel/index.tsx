@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { Input, Select, DatePicker, Button, Upload, message, Form, Modal, Spin } from 'antd';
 import { useModel } from '../../utils/index';
 import FormItem from '../FormItem';
-import { getMax, updateUserInfo, addDrug, jinhuo, repairDrug, adminUpdateUser } from '../../api/Api';
+import { getMax, updateUserInfo, addDrug, jinhuo, updateDrug, adminUpdateUser } from '../../api/Api';
 export default function MyModel() {
   const { open, setOpen, titleMap, type } = useModel()
   const onFinish = async (values) => {
@@ -43,7 +43,7 @@ export default function MyModel() {
           return
         }
         values.note = values.note || '无'
-        await repairDrug(values)
+        await updateDrug(values)
         message.success('修改成功！')
         location.reload()
         setOpen(false)
@@ -96,10 +96,14 @@ export default function MyModel() {
       case 3:
         return (<>
           <FormItem label='药品图片(链接)' name='img' type='string'></FormItem>
-          <FormItem label='药品数量下限' name='stock_lower_limit' type='number'></FormItem>
-          <FormItem label='药品数量上限' name='stock_upper_limit' type='number'></FormItem>
-          <FormItem label='药品单价' name='price' type='number'></FormItem>
+          <FormItem label='药品名称' name='drug_name' type='string'></FormItem>
           <FormItem label='药品说明' name='drug_description' type='string'></FormItem>
+          <FormItem label='生产厂家' name='manufacturer' type='string'></FormItem>
+          <FormItem label='单位' name='unit' type='string'></FormItem>
+          <FormItem label='规格' name='specification' type='string'></FormItem>
+          <FormItem label='库存下限' name='stock_lower_limit' type='number'></FormItem>
+          <FormItem label='库存上限' name='stock_upper_limit' type='number'></FormItem>
+          <FormItem label='售价' name='price' type='number'></FormItem>
         </>)
       case 4:
         return (<>

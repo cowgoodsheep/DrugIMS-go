@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {  Space, Tag } from 'antd';
 import MyTable from '../MyTable';
 import { addOneDay } from '../../utils';
-import { getAllKucun } from '../../api/Api';
+import { getStockList } from '../../api/Api';
 const columns = [
     {
         title: '库存ID',
@@ -64,7 +64,7 @@ export default function PublicDb({ searchValue }:{searchValue:string}) {
     }, [searchValue])
     const getData = async(searchValue = '') => {
         setLoading(true)
-        const data = await getAllKucun(searchValue)
+        const data = await getStockList(searchValue)
         data.map((v,i)=>{
             data[i].production_date = addOneDay(data[i].production_date.split('T')[0])
             data[i].purchase_date = addOneDay(data[i].purchase_date.split('T')[0])

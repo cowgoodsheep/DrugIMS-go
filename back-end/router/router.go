@@ -66,11 +66,11 @@ func SetupRouter() *gin.Engine {
 		// 用户登录
 		userGroup.POST("/login", controller.UserLogin)
 		// 更新用户信息
-		userGroup.POST("/update", middleware.JWTMiddleWare(), controller.UserUpdate)
+		userGroup.POST("/update", middleware.JWTMiddleWare(), controller.UpdateUser)
 		// 获取用户列表
 		userGroup.POST("/getUserList", middleware.JWTMiddleWare(), controller.GetUserList)
 		// 用户注销(软删除)
-		userGroup.POST("/delete", middleware.JWTMiddleWare(), controller.UserDelete)
+		userGroup.POST("/delete", middleware.JWTMiddleWare(), controller.DeleteUser)
 	}
 
 	// 药品路由组
@@ -78,14 +78,28 @@ func SetupRouter() *gin.Engine {
 	{
 		// 获取全部药品
 		drugGroup.POST("/getDrugList", middleware.JWTMiddleWare(), controller.GetDrugList)
-		// // 创建药品
-		// drugGroup.POST("/create")
-		// // 删除药品
-		// drugGroup.POST("/delete")
-		// // 购买药品
-		// drugGroup.POST("/buy")
-		// // 进货
-		// drugGroup.POST("/provide")
+		// 添加药品
+		drugGroup.POST("/addDrug", middleware.JWTMiddleWare(), controller.AddDrug)
+		// 更新药品
+		drugGroup.POST("/updateDrug", middleware.JWTMiddleWare(), controller.UpdateDrug)
+		// 删除药品
+		drugGroup.POST("/deleteDrug", middleware.JWTMiddleWare(), controller.DeleteDrug)
+		// 购买药品
+		drugGroup.POST("/buyDrug", middleware.JWTMiddleWare(), controller.BuyDrug)
+	}
+
+	// 库存路由组
+	stockGroup := r.Group("/stock")
+	{
+		// 获取库存信息列表
+		stockGroup.POST("/getStockList", middleware.JWTMiddleWare(), controller.GetStockList)
+	}
+
+	// 销售路由组
+	saleGroup := r.Group("/sale")
+	{
+		// 获取销售信息列表
+		saleGroup.POST("/getSaleList", middleware.JWTMiddleWare(), controller.GetSaleList)
 	}
 	return r
 }

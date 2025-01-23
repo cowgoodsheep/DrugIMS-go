@@ -104,7 +104,7 @@ func UserLogin(c *gin.Context) {
 }
 
 // 用户信息更新
-func UserUpdate(c *gin.Context) {
+func UpdateUser(c *gin.Context) {
 	// 获取用户信息
 	var u model.UserInfo
 	if err := c.ShouldBindJSON(&u); err != nil {
@@ -149,7 +149,7 @@ func GetUserList(c *gin.Context) {
 }
 
 // 删除用户
-func UserDelete(c *gin.Context) {
+func DeleteUser(c *gin.Context) {
 	// 获取用户信息
 	var u model.UserInfo
 	if err := c.ShouldBindJSON(&u); err != nil {

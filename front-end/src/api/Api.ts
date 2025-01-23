@@ -63,31 +63,31 @@ export const addDrug = async (postData) => {
   const data = await serviceAxios.post('/drug/addDrug', postData)
   return data
 }
-// 删除药品
-export const deleteDrug = async (drug_id) => {
-  const data = await serviceAxios.post('/drug/deleteDrug', { drug_id })
-  return data
-}
 // 修改药品，同时做库存阈值检查逻辑
-export const repairDrug = async (postData) => {
+export const updateDrug = async (postData) => {
   const { img, stock_lower_limit, stock_upper_limit, price, drug_description, drug_id } = JSON.parse(localStorage.getItem('drugMsg'))
   postData.img = postData.img || img
   postData.stock_lower_limit = postData.stock_lower_limit || stock_lower_limit
   postData.stock_upper_limit = postData.stock_upper_limit || stock_upper_limit
   postData.price = postData.price || price
   postData.drug_description = postData.drug_description || drug_description
-  const data = await serviceAxios.post('/drug/repairDrug', { ...postData, drug_id })
+  const data = await serviceAxios.post('/drug/updateDrug', { ...postData, drug_id })
+  return data
+}
+// 删除药品
+export const deleteDrug = async (drug_id) => {
+  const data = await serviceAxios.post('/drug/deleteDrug', { drug_id })
+  return data
+}
+// 客户购买药品
+export const buyDrug = async (postData) => {
+  const data = await serviceAxios.post('/drug/buyDrug', { ...postData, user_id })
   return data
 }
 // 供应商药品进货
 export const jinhuo = async (postData) => {
   const drug_id = +localStorage.getItem('drugId')
   const data = await serviceAxios.post('/drug/jinhuo', { ...postData, user_id, drug_id })
-  return data
-}
-// 客户购买药品
-export const buyDrug = async (postData) => {
-  const data = await serviceAxios.post('/drug/buyDrug', { ...postData, user_id })
   return data
 }
 // 获取药品max
@@ -101,18 +101,21 @@ export const getMax = async () => {
 
 // 库存路由组
 // 库存信息
-export const getAllKucun = async (searchValue) => {
-  const data = await serviceAxios.post('/table/getKucun', { searchValue })
+export const getStockList = async (searchValue) => {
+  const data = await serviceAxios.post('/stock/getStockList', searchValue)
   return data
 }
+
+// 销售路由组
 // 销售信息
-export const getAllXiaoshou = async (searchValue) => {
-  const data = await serviceAxios.post('/table/getXiaoshou', { searchValue })
+export const getSaleList = async (searchValue) => {
+  const data = await serviceAxios.post('/sale/getSaleList', searchValue)
   return data
 }
+
 // 入库信息
 export const getAllRuku = async (searchValue) => {
-  const data = await serviceAxios.post('/table/getRuku', { searchValue })
+  const data = await serviceAxios.post('/table/getRuku', searchValue)
   return data
 }
 // 我的进货信息

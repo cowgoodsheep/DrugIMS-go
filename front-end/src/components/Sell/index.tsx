@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import {  Space, Tag } from 'antd';
 import MyTable from '../MyTable';
-import { getAllXiaoshou } from '../../api/Api';
+import { getSaleList } from '../../api/Api';
 import { addOneDay } from '../../utils';
 
 const columns = [
     {
         title: '销售ID',
-        dataIndex: 'sales_id',
-        key: 'sales_id',
+        dataIndex: 'sale_id',
+        key: 'sale_id',
         fixed: 'left',
         width: 100
     },
@@ -27,24 +27,24 @@ const columns = [
     },
     {
         title: '销售日期',
-        dataIndex: 'sales_date',
-        key: 'sales_date',
+        dataIndex: 'sale_date',
+        key: 'sale_date',
         width: 100
     }, {
         title: '销售数量',
-        dataIndex: 'sales_quantity',
-        key: 'sales_quantity',
+        dataIndex: 'sale_quantity',
+        key: 'sale_quantity',
         width: 100
     }, {
         title: '销售单价',
-        dataIndex: 'sales_unit_price',
-        key: 'sales_unit_price',
+        dataIndex: 'sale_unit_price',
+        key: 'sale_unit_price',
         width: 100
     }, 
     {
         title: '销售金额',
-        dataIndex: 'sales_amount',
-        key: 'sales_amount',
+        dataIndex: 'sale_amount',
+        key: 'sale_amount',
         width: 100
     }, 
 ];
@@ -59,9 +59,9 @@ export default function PublicDb({ searchValue }:{searchValue:string}) {
     }, [searchValue])
     const getData =async (searchValue = '') => {
         setLoading(true)
-        const data = await getAllXiaoshou(searchValue)
+        const data = await getSaleList(searchValue)
         data.map((v,i)=>{
-            data[i].sales_date = addOneDay(data[i].sales_date.split('T')[0])
+            data[i].sale_date = addOneDay(data[i].sale_date.split('T')[0])
         })
         setLoading(false)
        setData(data)
