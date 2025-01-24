@@ -27,9 +27,12 @@ export default function Drug({ searchValue }: { searchValue: string }) {
       message.warning("药品库存不足，购买失败！");
     } else {
       message.success("购买成功！");
+      // 暂停一会在刷新
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      location.reload();
     }
   };
-  const handleJinhuo = async (drug_id) => {
+  const handlePurchase = async (drug_id) => {
     setType(2);
     localStorage.setItem("drugId", drug_id);
     const max = await getMax();
@@ -110,10 +113,11 @@ export default function Drug({ searchValue }: { searchValue: string }) {
     },
     {
       title: "售价",
-      dataIndex: "price",
-      key: "price",
+      dataIndex: "sale_price",
+      key: "sale_price",
       align: "center",
       width: 50,
+      render: (text) => <span>{parseFloat(text).toFixed(2)}</span>,
     },
     {
       title: "操作",
@@ -138,7 +142,7 @@ export default function Drug({ searchValue }: { searchValue: string }) {
               </Popconfirm>
             </>
           ) : role === "供应商" ? (
-            <Button onClick={() => handleJinhuo(record.drug_id)}>进货</Button>
+            <Button onClick={() => handlePurchase(record.drug_id)}>进货</Button>
           ) : (
             <>
               <Button

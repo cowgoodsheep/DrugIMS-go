@@ -153,6 +153,22 @@ func BuyDrug(c *gin.Context) {
 		})
 		return
 	}
-	
-	c.JSON(http.StatusOK, nil)
+	// 购买药品
+	_, err := logic.BuyDrug(&d)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code": 400,
+			"data": gin.H{
+				"msg": err.Error(),
+			},
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": 200,
+		"data": gin.H{
+			"msg":  "购买成功",
+		},
+	})
 }

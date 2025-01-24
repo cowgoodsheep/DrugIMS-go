@@ -48,7 +48,7 @@ const Page = () => {
       localStorage.setItem('userinfo', JSON.stringify(data[0]))
       sessionStorage.setItem('pathname', '')
       navigate('/home')
-      // location.reload();
+      location.reload();
     } else {
       message.warning(data.data.msg)
     }

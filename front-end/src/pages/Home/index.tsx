@@ -83,7 +83,7 @@ const Home = () => {
                   paddingBlockStart: 12,
                 }}
               >
-                <div>© 2023 CowGoodSheep</div>
+                <div>© 2025 CowGoodSheep</div>
               </div>
             );
           }}

@@ -100,6 +100,8 @@ func SetupRouter() *gin.Engine {
 	{
 		// 获取销售信息列表
 		saleGroup.POST("/getSaleList", middleware.JWTMiddleWare(), controller.GetSaleList)
+		// 获取我的购买记录列表
+		saleGroup.POST("/getUserSaleList", middleware.JWTMiddleWare(), controller.GetUserSaleList)
 	}
 	return r
 }

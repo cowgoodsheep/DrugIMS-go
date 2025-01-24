@@ -107,9 +107,14 @@ export const getStockList = async (searchValue) => {
 }
 
 // 销售路由组
-// 销售信息
+// 获取所有销售信息
 export const getSaleList = async (searchValue) => {
   const data = await serviceAxios.post('/sale/getSaleList', searchValue)
+  return data
+}
+// 获取我的购买信息
+export const getUserSaleList = async (searchValue) => {
+  const data = await serviceAxios.post('/sale/getUserSaleList', { user_id, searchValue })
   return data
 }
 
@@ -123,10 +128,5 @@ export const getMyRuku = async () => {
   const startDate = localStorage.getItem('startDate')
   const endDate = localStorage.getItem('endDate')
   const data = await serviceAxios.post('/table/getMyRuku', { user_id, startDate, endDate })
-  return data
-}
-// 我的购买信息
-export const getAllBuy = async (searchValue) => {
-  const data = await serviceAxios.post('/table/getBuy', { user_id, searchValue })
   return data
 }

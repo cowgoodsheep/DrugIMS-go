@@ -2,19 +2,21 @@ package model
 
 import (
 	"drugims/dao"
+	"errors"
 )
 
 // SaleInfo Model
 type SaleInfo struct {
-	SaleId        int32  `json:"sale_id"`         // 销售ID
-	DrugId        int32  `json:"drug_id"`         // 药品ID
-	UserId        int32  `json:"user_id"`         // 客户ID
-	SaleDate      string `json:"sale_date"`       // 销售日期
-	SaleQuantity  int32  `json:"sale_quantity"`   // 销售数量
-	SaleUnitPrice string `json:"sale_unit_price"` // 销售单价
-	SaleAmount    string `json:"sale_amount"`     // 销售金额
+	SaleId         int32   `json:"sale_id"`         // 销售ID
+	DrugId         int32   `json:"drug_id"`         // 药品ID
+	UserId         int32   `json:"user_id"`         // 客户ID
+	SaleDate       string  `json:"sale_date"`       // 销售日期
+	SaleQuantity   int32   `json:"sale_quantity"`   // 销售数量
+	SaleAmount     float32 `json:"sale_amount"`     // 销售金额
+	PurchaseAmount float32 `json:"purchase_amount"` // 进货金额
 
 	UserName string `json:"user_name" gorm:"-"` // 用户名称
+	DrugName string `json:"drug_name" gorm:"-"` // 用户名称
 }
 
 // 指定SaleInfo结构体迁移表sale_info
@@ -22,26 +24,76 @@ func (s *SaleInfo) TableName() string {
 	return "sale_info"
 }
 
+// GetSaleBySaleId 获取根据销售id获取销售记录
+func GetSaleBySaleId(saleId int32) *SaleInfo {
+	var sFind SaleInfo
+	dao.DB.Model(&SaleInfo{}).Where("sale_id=?", saleId).First(&sFind)
+	if sFind.SaleId == 0 {
+		return nil
+	}
+	dFind := GetDrugByDrugId(sFind.DrugId)
+	sFind.DrugName = dFind.DrugName
+	return &sFind
+}
+
 // GetSaleListByUserId 获取根据用户id获取销售信息
 func GetSaleListByUserId(userId int32) []*SaleInfo {
-	var sFind []*SaleInfo
-	dao.DB.Model(&SaleInfo{}).Where("user_id=?", userId).Find(&sFind)
-	return sFind
+	var sListFind []*SaleInfo
+	dao.DB.Model(&SaleInfo{}).Where("user_id=?", userId).Find(&sListFind)
+	uFind := GetUserByUserId(userId)
+	for _, s := range sListFind {
+		s.UserName = uFind.UserName
+		dFind := GetDrugByDrugId(s.DrugId)
+		s.DrugName = dFind.DrugName
+	}
+	return sListFind
+}
+
+// GetSaleListByDrugId 获取根据药品id获取销售信息
+func GetSaleListByDrugId(drugId int32) []*SaleInfo {
+	var sListFind []*SaleInfo
+	dao.DB.Model(&SaleInfo{}).Where("drug_id=?", drugId).Find(&sListFind)
+	for _, s := range sListFind {
+		dFind := GetDrugByDrugId(s.DrugId)
+		uFind := GetUserByUserId(s.UserId)
+		s.DrugName = dFind.DrugName
+		s.UserName = uFind.UserName
+	}
+	return sListFind
 }
 
 // LikeGetSaleListByUserName 获取根据用户名称模模糊查询销售列表
 func LikeGetSaleListByUserName(userName string) []*SaleInfo {
-	// 先获取用户id
+	// 获取用户id
 	uListFind := LikeGetUserListByUserName(userName)
 	sListFind := []*SaleInfo{}
 	for _, u := range uListFind {
 		sList := GetSaleListByUserId(u.UserId)
-		for _, s := range sList {
-			s.UserName = u.UserName
-		}
 		if len(sList) > 0 {
 			sListFind = append(sListFind, sList...)
 		}
 	}
 	return sListFind
+}
+
+// LikeGetSaleListByDrugName 获取根据药品名称模模糊查询销售列表
+func LikeGetSaleListByDrugName(drugName string) []*SaleInfo {
+	// 获取药品id
+	dListFind := LikeGetDrugListByDrugName(drugName)
+	sListFind := []*SaleInfo{}
+	for _, d := range dListFind {
+		sList := GetSaleListByDrugId(d.DrugId)
+		if len(sList) > 0 {
+			sListFind = append(sListFind, sList...)
+		}
+	}
+	return sListFind
+}
+
+// CreateSale 创建销售记录
+func CreateSale(s *SaleInfo) error {
+	if s == nil {
+		return errors.New("空指针错误")
+	}
+	return dao.DB.Model(&SaleInfo{}).Create(s).Error
 }

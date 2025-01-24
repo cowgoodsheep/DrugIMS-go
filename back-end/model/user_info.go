@@ -80,6 +80,16 @@ func LikeGetUserListByUserName(userName string) []*UserInfo {
 	return uListFind
 }
 
+// GetUserByUserId 获取根据用户id获取用户
+func GetUserByUserId(userId int32) *UserInfo {
+	var uFind UserInfo
+	dao.DB.Model(&UserInfo{}).Where("user_id=?", userId).First(&uFind)
+	if uFind.UserId == 0 {
+		return nil
+	}
+	return &uFind
+}
+
 // DeleteUser 删除用户
 func DeleteUser(userId int32) {
 	dao.DB.Model(&UserInfo{}).Where("user_id = ?", userId).Update("status", 2)

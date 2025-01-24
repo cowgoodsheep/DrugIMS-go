@@ -6,13 +6,13 @@ import (
 
 // StockInfo Model
 type StockInfo struct {
-	StockId           int32  `json:"stock_id"`            // 库存ID
-	DrugId            int32  `json:"drug_id"`             // 药品ID
-	BatchNumber       string `json:"batch_number"`        // 批号
-	ProductionDate    string `json:"production_date"`     // 生产日期
-	PurchaseDate      string `json:"purchase_date"`       // 进货日期
-	PurchaseUnitPrice string `json:"purchase_unit_price"` // 进货单价
-	RemainingQuantity int32  `json:"remaining_quantity"`  // 剩余数量
+	StockId           int32   `json:"stock_id"`           // 库存ID
+	DrugId            int32   `json:"drug_id"`            // 药品ID
+	BatchNumber       string  `json:"batch_number"`       // 批号
+	ProductionDate    string  `json:"production_date"`    // 生产日期
+	PurchaseDate      string  `json:"purchase_date"`      // 进货日期
+	PurchasePrice     float32 `json:"purchase_price"`     // 进货单价
+	RemainingQuantity int32   `json:"remaining_quantity"` // 剩余数量
 
 	DrugName string `json:"drug_name" gorm:"-"` // 库存剩余数量
 }
@@ -23,8 +23,8 @@ func (s *StockInfo) TableName() string {
 }
 
 // GetDrugRemain 获取药品剩余数量
-func GetDrugRemain(drugId int32) int64 {
-	var total int64
+func GetDrugRemain(drugId int32) int32 {
+	var total int32
 	row := dao.DB.Model(&StockInfo{}).Where("drug_id = ?", drugId).Select("SUM(remaining_quantity) as total").Row()
 	row.Scan(&total)
 	return total
@@ -67,4 +67,14 @@ func GetStockByStockId(stockId int32) *StockInfo {
 	}
 	sFind.DrugName = d.DrugName
 	return &sFind
+}
+
+// UpdateStock 更新库存
+func UpdateStock(stockInfo *StockInfo) error {
+	return dao.DB.Model(&StockInfo{}).Where("stock_id = ?", stockInfo.StockId).Updates(stockInfo).Error
+}
+
+// DeleteStock 删除库存
+func DeleteStock(stockId int32) error {
+	return dao.DB.Model(&StockInfo{}).Where("stock_id = ?", stockId).Delete(&StockInfo{}).Error
 }
