@@ -2,6 +2,7 @@ package model
 
 import (
 	"drugims/dao"
+	"errors"
 )
 
 // StockInfo Model
@@ -10,8 +11,8 @@ type StockInfo struct {
 	DrugId            int32   `json:"drug_id"`            // 药品ID
 	BatchNumber       string  `json:"batch_number"`       // 批号
 	ProductionDate    string  `json:"production_date"`    // 生产日期
-	PurchaseDate      string  `json:"purchase_date"`      // 进货日期
-	PurchasePrice     float32 `json:"purchase_price"`     // 进货单价
+	SupplyDate        string  `json:"supply_date"`        // 进货日期
+	SupplyPrice       float32 `json:"supply_price"`       // 进货单价
 	RemainingQuantity int32   `json:"remaining_quantity"` // 剩余数量
 
 	DrugName string `json:"drug_name" gorm:"-"` // 库存剩余数量
@@ -77,4 +78,12 @@ func UpdateStock(stockInfo *StockInfo) error {
 // DeleteStock 删除库存
 func DeleteStock(stockId int32) error {
 	return dao.DB.Model(&StockInfo{}).Where("stock_id = ?", stockId).Delete(&StockInfo{}).Error
+}
+
+// CreateStock 创建库存记录
+func CreateStock(s *StockInfo) error {
+	if s == nil {
+		return errors.New("空指针错误")
+	}
+	return dao.DB.Model(&StockInfo{}).Create(s).Error
 }

@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { Input, Select, DatePicker, Button, Upload, message, Form, Modal, Spin } from 'antd';
 import { useModel } from '../../utils/index';
 import FormItem from '../FormItem';
-import { getMax, updateUserInfo, addDrug, jinhuo, updateDrug, adminUpdateUser } from '../../api/Api';
+import { updateUserInfo, addDrug, supplyDrug, updateDrug, adminUpdateUser } from '../../api/Api';
 export default function MyModel() {
   const { open, setOpen, titleMap, type } = useModel()
   const onFinish = async (values) => {
@@ -10,15 +10,15 @@ export default function MyModel() {
       case 0:
         const data = await updateUserInfo(values)
         const info = JSON.parse(localStorage.getItem('userinfo'))
-        Object.keys(values).forEach((key)=>{
-          if(values[key]){
-            info[key] =values[key]
+        Object.keys(values).forEach((key) => {
+          if (values[key]) {
+            info[key] = values[key]
           }
         })
         let newInfo = { ...info }
         localStorage.setItem('userinfo', JSON.stringify(newInfo))
         message.success('修改成功！')
-        // location.reload()
+        location.reload()
         setOpen(false)
         break;
       case 1:
@@ -32,7 +32,7 @@ export default function MyModel() {
         setOpen(false)
         break;
       case 2:
-        await jinhuo(values)
+        await supplyDrug(values)
         message.success('进货成功！')
         location.reload()
         setOpen(false)
@@ -89,8 +89,8 @@ export default function MyModel() {
           >
             <DatePicker />
           </Form.Item>
-          <FormItem label='进货单价' name='purchase_unit_price' need={true} type='number'></FormItem>
-          <FormItem label='进货数量' name='remaining_quantity' need={true} type='number'></FormItem>
+          <FormItem label='进货单价' name='supply_price' need={true} type='number'></FormItem>
+          <FormItem label='进货数量' name='supply_quantity' need={true} type='number'></FormItem>
           <FormItem label='备注' name='note' type='string'></FormItem>
         </>)
       case 3:

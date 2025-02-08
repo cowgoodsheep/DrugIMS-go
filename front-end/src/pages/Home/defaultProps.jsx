@@ -35,7 +35,7 @@ const defaultProps = {
             }, 
             {
                 name: '入库信息',
-                path: '/purchaseInfo',
+                path: '/supplyInfo',
                 hideInMenu:role!=='管理员'
 
             }, 

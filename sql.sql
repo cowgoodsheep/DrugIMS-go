@@ -32,32 +32,34 @@ CREATE TABLE `stock_info` (
     `drug_id` INT NOT NULL COMMENT '药品ID',
     `batch_number` VARCHAR(50) NULL COMMENT '批号',
     `production_date` DATE NULL COMMENT '生产日期',
-    `purchase_date` DATE NULL COMMENT '进货日期',
-    `purchase_price` DECIMAL(10, 2) NULL COMMENT '进货单价',
+    `supply_date` DATE NULL COMMENT '进货日期',
+    `supply_price` DECIMAL(10, 2) NULL COMMENT '进货单价',
     `remaining_quantity` INT NULL COMMENT '剩余数量',
     `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
 ) COMMENT '库存信息表';
 
 CREATE TABLE `sale_info` (
-    `sale_id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '销售ID，主键',
+    `sale_id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '销售ID, 主键',
     `drug_id` INT NOT NULL COMMENT '药品ID',
     `user_id` INT NOT NULL COMMENT '客户ID',
     `sale_date` DATE NOT NULL COMMENT '销售日期',
     `sale_quantity` INT NOT NULL COMMENT '销售数量',
     `sale_amount` DECIMAL(10, 2) NOT NULL COMMENT '销售金额',
-    `purchase_amount` DECIMAL(10, 2) NOT NULL COMMENT '进货金额',
+    `supply_amount` DECIMAL(10, 2) NOT NULL COMMENT '进货金额',
     `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
 ) COMMENT '销售信息表';
 
-CREATE TABLE `purchase_order` (
-    `purchase_id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '进货单ID，主键',
+CREATE TABLE `supply_order` (
+    `supply_id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '进货单ID, 主键',
     `drug_id` INT NOT NULL COMMENT '药品ID',
     `user_id` INT NOT NULL COMMENT '供应商ID',
-    `purchase_date` DATE NOT NULL COMMENT '进货日期',
-    `purchase_quantity` INT NOT NULL COMMENT '进货数量',
-    `purchase_amount` DECIMAL(10, 2) NOT NULL COMMENT '进货金额',
+    `batch_number` VARCHAR(50) NULL COMMENT '批号',
+    `production_date` DATE NULL COMMENT '生产日期',
+    `supply_date` DATE NOT NULL COMMENT '进货日期',
+    `supply_quantity` INT NOT NULL COMMENT '进货数量',
+    `supply_price` DECIMAL(10, 2) NULL COMMENT '进货单价',
     `note` VARCHAR(500) NULL COMMENT '备注',
     `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'

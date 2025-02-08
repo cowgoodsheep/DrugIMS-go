@@ -84,20 +84,26 @@ func SetupRouter() *gin.Engine {
 		drugGroup.POST("/updateDrug", middleware.JWTMiddleWare(), controller.UpdateDrug)
 		// 删除药品
 		drugGroup.POST("/deleteDrug", middleware.JWTMiddleWare(), controller.DeleteDrug)
-		// 购买药品
-		drugGroup.POST("/buyDrug", middleware.JWTMiddleWare(), controller.BuyDrug)
 	}
 
 	// 库存路由组
 	stockGroup := r.Group("/stock")
 	{
+		// 进货
+		stockGroup.POST("/supplyDrug", middleware.JWTMiddleWare(), controller.SupplyDrug)
 		// 获取库存信息列表
 		stockGroup.POST("/getStockList", middleware.JWTMiddleWare(), controller.GetStockList)
+		// 获取进货信息列表
+		stockGroup.POST("/getSupplyList", middleware.JWTMiddleWare(), controller.GetSupplyList)
+		// 获取我的进货记录列表
+		stockGroup.POST("/getUserSupplyList", middleware.JWTMiddleWare(), controller.GetUserSupplyList)
 	}
 
 	// 销售路由组
 	saleGroup := r.Group("/sale")
 	{
+		// 购买
+		saleGroup.POST("/buyDrug", middleware.JWTMiddleWare(), controller.BuyDrug)
 		// 获取销售信息列表
 		saleGroup.POST("/getSaleList", middleware.JWTMiddleWare(), controller.GetSaleList)
 		// 获取我的购买记录列表

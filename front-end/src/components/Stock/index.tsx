@@ -38,14 +38,14 @@ const columns = [
   },
   {
     title: "进货日期",
-    dataIndex: "purchase_date",
-    key: "purchase_date",
+    dataIndex: "supply_date",
+    key: "supply_date",
     width: 100,
   },
   {
     title: "进货单价",
-    dataIndex: "purchase_price",
-    key: "purchase_price",
+    dataIndex: "supply_price",
+    key: "supply_price",
     width: 100,
     render: (text) => <span>{parseFloat(text).toFixed(2)}</span>,
   },
@@ -72,7 +72,7 @@ export default function PublicDb({ searchValue }: { searchValue: string }) {
       data[i].production_date = addOneDay(
         data[i].production_date.split("T")[0]
       );
-      data[i].purchase_date = addOneDay(data[i].purchase_date.split("T")[0]);
+      data[i].supply_date = addOneDay(data[i].supply_date.split("T")[0]);
     });
     setLoading(false);
     setData(data);

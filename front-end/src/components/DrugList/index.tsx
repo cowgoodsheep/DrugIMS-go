@@ -9,14 +9,14 @@ import {
   Tooltip,
 } from "antd";
 import MyTable from "../MyTable";
-import { getDrugList, buyDrug, deleteDrug, getMax } from "../../api/Api";
+import { getDrugList, buyDrug, deleteDrug } from "../../api/Api";
 import { useModel } from "../../utils";
 export default function Drug({ searchValue }: { searchValue: string }) {
   const [loading, setLoading] = useState(false);
   const [count, setCount] = useState(1);
   const [data, setData] = useState([]);
   const role = JSON.parse(localStorage.getItem("userinfo")).role;
-  const { setType, setMax } = useModel();
+  const { setType } = useModel();
   const handleBuy = async (record) => {
     const data = await buyDrug({
       ...record,
@@ -27,17 +27,14 @@ export default function Drug({ searchValue }: { searchValue: string }) {
       message.warning("药品库存不足，购买失败！");
     } else {
       message.success("购买成功！");
-      // 暂停一会在刷新
+      // 暂停一会在刷新，让购买成功显示一会
       await new Promise((resolve) => setTimeout(resolve, 1000));
       location.reload();
     }
   };
-  const handlePurchase = async (drug_id) => {
+  const handleSupply = async (drug_id) => {
     setType(2);
     localStorage.setItem("drugId", drug_id);
-    const max = await getMax();
-    console.log(max, "set");
-    setMax(max);
   };
   const columns = [
     {
@@ -89,21 +86,21 @@ export default function Drug({ searchValue }: { searchValue: string }) {
     ...(role === "客户"
       ? []
       : [
-          {
-            title: "库存下限",
-            dataIndex: "stock_lower_limit",
-            key: "stock_lower_limit",
-            align: "center",
-            width: 100,
-          },
-          {
-            title: "库存上限",
-            dataIndex: "stock_upper_limit",
-            key: "stock_upper_limit",
-            align: "center",
-            width: 100,
-          },
-        ]),
+        {
+          title: "库存下限",
+          dataIndex: "stock_lower_limit",
+          key: "stock_lower_limit",
+          align: "center",
+          width: 100,
+        },
+        {
+          title: "库存上限",
+          dataIndex: "stock_upper_limit",
+          key: "stock_upper_limit",
+          align: "center",
+          width: 100,
+        },
+      ]),
     {
       title: "库存剩余",
       dataIndex: "stock_remain",
@@ -142,7 +139,7 @@ export default function Drug({ searchValue }: { searchValue: string }) {
               </Popconfirm>
             </>
           ) : role === "供应商" ? (
-            <Button onClick={() => handlePurchase(record.drug_id)}>进货</Button>
+            <Button onClick={() => handleSupply(record.drug_id)}>进货</Button>
           ) : (
             <>
               <Button

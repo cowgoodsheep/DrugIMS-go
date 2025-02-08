@@ -16,12 +16,12 @@ import Drug from '../DrugList';
 import MyDrug from '../MyDrug';
 import Kucun from '../Stock'
 import Sell from '../Sell';
-import Ruku from '../Ruku'
+import Ruku from '../Supply'
 import User from '../User'
-import MyRuku from '../MyRuku'
+import MyRuku from '../MySupply'
 import { useModel } from '../../utils';
 import dayjs from 'dayjs';
-import { getMyRuku } from '../../api/Api';
+import { getUserSupplyList } from '../../api/Api';
 const MyPageContainer = ({ pathname }:{[key:string]:string}) => {
   const [searchValue, setSearchValue] = useState('')
   const {setType} = useModel()
@@ -129,7 +129,7 @@ const MyPageContainer = ({ pathname }:{[key:string]:string}) => {
             which === 'myBuyRecord' ? <MyDrug searchValue={searchValue} /> :
             which === 'stock' ? <Kucun searchValue={searchValue} /> :
             which === 'saleInfo' ? <Sell searchValue={searchValue} /> :
-            which === 'purchaseInfo' ? <Ruku searchValue={searchValue} /> :
+            which === 'supplyInfo' ? <Ruku searchValue={searchValue} /> :
           which === 'user' ? <User searchValue={searchValue} /> :
           which === 'myinput' ? <MyRuku searchValue={searchValue} change={temp}/> :
           <UserInfo/>}

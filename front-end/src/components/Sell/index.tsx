@@ -39,8 +39,8 @@ const columns = [
   },
   {
     title: "进货金额",
-    dataIndex: "purchase_amount",
-    key: "purchase_amount",
+    dataIndex: "supply_amount",
+    key: "supply_amount",
     width: 100,
     render: (text) => <span>{parseFloat(text).toFixed(2)}</span>,
   },
@@ -53,13 +53,13 @@ const columns = [
   },
   {
     title: "利润",
-    dataIndex: ["sale_amount", "purchase_amount"],
+    dataIndex: ["sale_amount", "supply_amount"],
     key: "profit",
     width: 100,
     render: (_, record) => {
       const sale = parseFloat(record.sale_amount) || 0;
-      const purchase = parseFloat(record.purchase_amount) || 0;
-      const profit = sale - purchase;
+      const supply = parseFloat(record.supply_amount) || 0;
+      const profit = sale - supply;
       return <span>{profit.toFixed(2)}</span>; // 根据需要格式化利润
     },
   },
