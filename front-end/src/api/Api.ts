@@ -121,3 +121,10 @@ export const getUserSaleList = async (searchValue) => {
   const data = await serviceAxios.post('/sale/getUserSaleList', { user_id, searchValue })
   return data
 }
+
+// 工具路由组
+// aichat
+export const aiChat = async (message) => {
+  const data = await serviceAxios.post('/tool/aiChat', message)
+  return data
+}

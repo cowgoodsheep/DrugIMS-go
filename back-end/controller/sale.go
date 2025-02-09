@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"drugims/logic"
 	"drugims/model"
 	"fmt"
 	"net/http"
@@ -83,4 +84,37 @@ func GetUserSaleList(c *gin.Context) {
 	}
 	// 返回数据
 	c.JSON(http.StatusOK, saleList)
+}
+
+// 购买药品
+func BuyDrug(c *gin.Context) {
+	// 获取前端药品信息
+	var d model.DrugInfo
+	if err := c.ShouldBindJSON(&d); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code": 400,
+			"data": gin.H{
+				"msg": err.Error(),
+			},
+		})
+		return
+	}
+	// 购买药品
+	_, err := logic.BuyDrug(&d)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code": 400,
+			"data": gin.H{
+				"msg": err.Error(),
+			},
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": 200,
+		"data": gin.H{
+			"msg": "购买成功",
+		},
+	})
 }

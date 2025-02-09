@@ -11,7 +11,6 @@ const routes = [
         path: '/home',
         element: <Home />,
     },
-
     // default route
     {
         path: '',

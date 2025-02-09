@@ -86,7 +86,7 @@ func (d *DrugInfoFlow) buyDrug() (*DrugInfoFlow, error) {
 		dateI, err1 := time.Parse("2006-01-02", stockList[i].ProductionDate)
 		dateJ, err2 := time.Parse("2006-01-02", stockList[j].ProductionDate)
 		if err1 != nil || err2 != nil {
-			return stockList[i].StockId < stockList[j].StockId
+			return stockList[i].StockId > stockList[j].StockId
 		}
 		return dateI.Before(dateJ)
 	})
@@ -95,7 +95,7 @@ func (d *DrugInfoFlow) buyDrug() (*DrugInfoFlow, error) {
 	saleTotalPrice := float32(0)      // 销售总价
 	supplyTotalPrice := float32(0)    // 采购总价
 	for _, stock := range stockList {
-		if stock.RemainingQuantity >= buyNum {
+		if stock.RemainingQuantity > buyNum {
 			stock.RemainingQuantity -= buyNum
 			saleTotalPrice += float32(buyNum) * d.DrugInfo.SalePrice
 			supplyTotalPrice += float32(buyNum) * stock.SupplyPrice

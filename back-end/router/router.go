@@ -56,8 +56,6 @@ func SetupRouter() *gin.Engine {
 	// 设置跨域访问处理、debug中间件
 	r.Use(corsMiddleware(), printRequestBodyMiddleware())
 
-	// Home主页
-	r.GET("/home", controller.Home)
 	// 用户路由组
 	userGroup := r.Group("/user")
 	{
@@ -108,6 +106,12 @@ func SetupRouter() *gin.Engine {
 		saleGroup.POST("/getSaleList", middleware.JWTMiddleWare(), controller.GetSaleList)
 		// 获取我的购买记录列表
 		saleGroup.POST("/getUserSaleList", middleware.JWTMiddleWare(), controller.GetUserSaleList)
+	}
+
+	toolGroup := r.Group("/tool")
+	{
+		// ai聊天工具
+		toolGroup.POST("/aiChat", middleware.JWTMiddleWare(), controller.AiChat)
 	}
 	return r
 }

@@ -17,7 +17,7 @@ func main() {
 	defer dao.DB.Close()
 	//开启路由
 	r := router.SetupRouter()
-	if err := r.Run(fmt.Sprintf(":%d", config.Conf.Port)); err != nil {
+	if err := r.Run(fmt.Sprintf(":%d", config.Conf.Server.Port)); err != nil {
 		fmt.Printf("server start failed, error:%v\n", err)
 	}
 }

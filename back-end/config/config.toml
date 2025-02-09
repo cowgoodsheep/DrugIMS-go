@@ -1,4 +1,4 @@
-#MySQL配置
+# MySQL配置
 [mysql]
 host = "127.0.0.1"
 port = 3306
@@ -9,7 +9,13 @@ charset = "utf8mb4"
 parse_time = true
 local = "Local"
 
-#服务器配置
+# 服务器配置
 [server]
 ip = "127.0.0.1"
 port = 8080
+
+# AiChat配置
+[ai_chat]
+url = "https://api.chatanywhere.tech/v1/chat/completions"
+key = "sk-r3eKcHwGqNyBxxyEUsCNufUMmPrGstvOuD6XmD5aDt9kUGmr"
+model = "gpt-3.5-turbo"
