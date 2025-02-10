@@ -77,7 +77,7 @@ export default function PublicDb({ searchValue }: { searchValue: string }) {
     setLoading(true);
     const data = await getSaleList(searchValue);
     data.map((v, i) => {
-      data[i].sale_date = addOneDay(data[i].sale_date.split("T")[0]);
+      data[i].sale_date = addOneDay(data[i].create_time.split("T")[0]);
     });
     setLoading(false);
     setData(data);

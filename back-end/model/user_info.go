@@ -16,6 +16,8 @@ type UserInfo struct {
 	Address     string `json:"address"`     // 地址
 	Role        string `json:"role"`        // 用户角色，管理员;客户;供应商
 	Status      int8   `json:"status"`      // 用户状态，1:正常;2:禁用
+	CreateTime  string `json:"create_time"`
+	UpdateTime  string `json:"update_time"`
 }
 
 // 指定User结构体迁移表user

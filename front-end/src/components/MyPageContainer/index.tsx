@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState, } from 'react'
-import { Input, theme, Button, Upload, message, Form, Modal, Spin,DatePicker } from 'antd';
+import { Input, theme, Button, Upload, message, Form, Modal, Spin, DatePicker } from 'antd';
 const { RangePicker } = DatePicker;
 import {
   SearchOutlined, UploadOutlined
@@ -14,37 +14,38 @@ import AuList from '../AuList';
 import UserInfo from '../UserInfo';
 import Drug from '../DrugList';
 import MyDrug from '../MyDrug';
-import Kucun from '../Stock'
+import Stock from '../Stock'
 import Sell from '../Sell';
-import Ruku from '../Supply'
+import Supply from '../Supply'
+import Statistics from '../Statistics'
 import User from '../User'
-import MyRuku from '../MySupply'
+import MySupply from '../MySupply'
 import { useModel } from '../../utils';
 import dayjs from 'dayjs';
 import { getUserSupplyList } from '../../api/Api';
-const MyPageContainer = ({ pathname }:{[key:string]:string}) => {
+const MyPageContainer = ({ pathname }: { [key: string]: string }) => {
   const [searchValue, setSearchValue] = useState('')
-  const {setType} = useModel()
-  const [temp,setTemp] = useState(0)
+  const { setType } = useModel()
+  const [temp, setTemp] = useState(0)
   const role = JSON.parse(localStorage.getItem('userinfo')).role
-  const which = useMemo(()=>{
+  const which = useMemo(() => {
     return pathname.split('/')[1]
-  },[pathname])
-  useEffect(()=>{
+  }, [pathname])
+  useEffect(() => {
     setSearchValue('')
-    localStorage.setItem('startDate','')
-    localStorage.setItem('endDate','')
-  },[pathname])
-  const onChange = (e)=>{
+    localStorage.setItem('startDate', '')
+    localStorage.setItem('endDate', '')
+  }, [pathname])
+  const onChange = (e) => {
     const startDate = dayjs(e[0]).format('YYYY-MM-DD');
     const endDate = dayjs(e[1]).format('YYYY-MM-DD');
-    localStorage.setItem('startDate',startDate)
-    localStorage.setItem('endDate',endDate)
-    setTemp(pre=>pre+1)
+    localStorage.setItem('startDate', startDate)
+    localStorage.setItem('endDate', endDate)
+    setTemp(pre => pre + 1)
   }
-  
+
   // eslint-disable-next-line @typescript-eslint/ban-types
-  const Operate = ({ which,  setSearchValue }:{which:string,setSearchValue:Function,}) => {
+  const Operate = ({ which, setSearchValue }: { which: string, setSearchValue: Function, }) => {
     return (
       <div
         style={{
@@ -52,18 +53,18 @@ const MyPageContainer = ({ pathname }:{[key:string]:string}) => {
           width: '100%',
         }}
       >
-        {pathname==='/myinput'? <RangePicker onChange={onChange} style={{marginRight:'20px'}}/>:<></>}
-        {pathname!=='/myinput'?<SearchInput placeholder={SearchInputList[which]} setSearchValue={setSearchValue} />:<></>}
-        {which === 'drug' &&role==='管理员'?
-            <Button onClick={() => setType(1)}>添加药品信息</Button>
-            :''
+        {pathname === '/myinput' ? <RangePicker onChange={onChange} style={{ marginRight: '20px' }} /> : <></>}
+        {pathname !== '/myinput' && which !== 'statisticsInfo'? <SearchInput placeholder={SearchInputList[which]} setSearchValue={setSearchValue} /> : <></>}
+        {which === 'drug' && role === '管理员' ?
+          <Button onClick={() => setType(1)}>添加药品信息</Button>
+          : ''
         }
 
       </div>
     );
   };
   // eslint-disable-next-line @typescript-eslint/ban-types
-  const SearchInput = ({ placeholder, setSearchValue }:{placeholder:string,setSearchValue:Function}) => {
+  const SearchInput = ({ placeholder, setSearchValue }: { placeholder: string, setSearchValue: Function }) => {
     const { token } = theme.useToken();
     return (
       <div
@@ -110,13 +111,13 @@ const MyPageContainer = ({ pathname }:{[key:string]:string}) => {
         width: '100%',
       }}
     >
-        <MyModel />
+      <MyModel />
       <PageContainer
         token={{
           paddingInlinePageContainerContent: 40,
         }}
-        
-        extra={which === 'userMsg'?'':<Operate which={which} setSearchValue={setSearchValue}  />}
+
+        extra={which === 'userMsg' ? '' : <Operate which={which} setSearchValue={setSearchValue} />}
       >
         <ProCard
           style={{
@@ -125,14 +126,15 @@ const MyPageContainer = ({ pathname }:{[key:string]:string}) => {
             overflow: 'auto'
           }}
         >
-            {which === 'drug' ? <Drug searchValue={searchValue} /> :
+          {which === 'drug' ? <Drug searchValue={searchValue} /> :
             which === 'myBuyRecord' ? <MyDrug searchValue={searchValue} /> :
-            which === 'stock' ? <Kucun searchValue={searchValue} /> :
-            which === 'saleInfo' ? <Sell searchValue={searchValue} /> :
-            which === 'supplyInfo' ? <Ruku searchValue={searchValue} /> :
-          which === 'user' ? <User searchValue={searchValue} /> :
-          which === 'myinput' ? <MyRuku searchValue={searchValue} change={temp}/> :
-          <UserInfo/>}
+              which === 'stock' ? <Stock searchValue={searchValue} /> :
+                which === 'saleInfo' ? <Sell searchValue={searchValue} /> :
+                  which === 'supplyInfo' ? <Supply searchValue={searchValue} /> :
+                    which === 'statisticsInfo' ? <Statistics searchValue={searchValue} /> :
+                      which === 'user' ? <User searchValue={searchValue} /> :
+                        which === 'myinput' ? <MySupply searchValue={searchValue} change={temp} /> :
+                          <UserInfo />}
           <div />
         </ProCard>
       </PageContainer>

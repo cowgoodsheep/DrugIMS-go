@@ -12,10 +12,11 @@ type SupplyOrder struct {
 	UserId         int32   `json:"user_id"`         // 客户ID
 	BatchNumber    string  `json:"batch_number"`    // 批号
 	ProductionDate string  `json:"production_date"` // 生产日期
-	SupplyDate     string  `json:"supply_date"`     // 进货日期
 	SupplyQuantity int32   `json:"supply_quantity"` // 进货数量
 	SupplyPrice    float32 `json:"supply_price"`    // 进货单价
 	Note           string  `json:"note"`            // 备注
+	CreateTime     string  `json:"create_time"`
+	UpdateTime     string  `json:"update_time"`
 
 	UserName string `json:"user_name" gorm:"-"` // 用户名称
 	DrugName string `json:"drug_name" gorm:"-"` // 药品名称

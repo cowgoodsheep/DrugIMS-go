@@ -17,6 +17,8 @@ type DrugInfo struct {
 	SalePrice       float32 `json:"sale_price"`        // 售价
 	DrugDescription string  `json:"drug_description"`  // 药品说明
 	Img             string  `json:"img"`               // 药品图片
+	CreateTime      string  `json:"create_time"`
+	UpdateTime      string  `json:"update_time"`
 
 	StockRemain  int32 `json:"stock_remain" gorm:"-"`  // 库存剩余数量
 	SaleQuantity int32 `json:"sale_quantity" gorm:"-"` // 购买数量

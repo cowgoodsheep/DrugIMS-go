@@ -86,7 +86,7 @@ export default function PublicDb({ searchValue }: { searchValue: string }) {
         data.map((v, i) => {
             data[i].supply_total_amount = data[i].supply_quantity * (data[i].supply_price || 0);
             data[i].supply_total_amount=data[i].supply_total_amount.toFixed(2)
-            data[i].supply_date = addOneDay(data[i].supply_date.split('T')[0])
+            data[i].supply_date = addOneDay(data[i].create_time.split('T')[0])
         })
         setLoading(false)
         setData(data)

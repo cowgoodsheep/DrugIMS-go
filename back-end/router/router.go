@@ -110,8 +110,10 @@ func SetupRouter() *gin.Engine {
 
 	toolGroup := r.Group("/tool")
 	{
-		// ai聊天工具
+		// ai聊天
 		toolGroup.POST("/aiChat", middleware.JWTMiddleWare(), controller.AiChat)
+		// 统计信息
+		toolGroup.POST("/getStatistics", controller.GetStatistics)
 	}
 	return r
 }

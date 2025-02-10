@@ -72,7 +72,7 @@ export default function PublicDb({ searchValue }: { searchValue: string }) {
       data[i].production_date = addOneDay(
         data[i].production_date.split("T")[0]
       );
-      data[i].supply_date = addOneDay(data[i].supply_date.split("T")[0]);
+      data[i].supply_date = addOneDay(data[i].create_time.split("T")[0]);
     });
     setLoading(false);
     setData(data);

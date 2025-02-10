@@ -118,7 +118,6 @@ func (d *DrugInfoFlow) buyDrug() (*DrugInfoFlow, error) {
 	saleInfo := &model.SaleInfo{
 		DrugId:       d.DrugInfo.DrugId,
 		UserId:       d.DrugInfo.UserId,
-		SaleDate:     time.Now().Format("2006-01-02"),
 		SaleQuantity: d.DrugInfo.SaleQuantity,
 		SaleAmount:   saleTotalPrice,
 		SupplyAmount: supplyTotalPrice,
@@ -147,13 +146,11 @@ func (d *DrugInfoFlow) supplyDrug() (*DrugInfoFlow, error) {
 		return nil, err
 	}
 	d.SupplyOrder.ProductionDate = t.Format("2006-01-02")
-	d.SupplyOrder.SupplyDate = time.Now().Format("2006-01-02")
 	// 存储库存信息
 	if err := model.CreateStock(&model.StockInfo{
 		DrugId:            d.DrugInfo.DrugId,
 		BatchNumber:       d.SupplyOrder.BatchNumber,
 		ProductionDate:    d.SupplyOrder.ProductionDate,
-		SupplyDate:        time.Now().Format("2006-01-02"),
 		SupplyPrice:       d.SupplyOrder.SupplyPrice,
 		RemainingQuantity: d.SupplyOrder.SupplyQuantity,
 	}); err != nil {

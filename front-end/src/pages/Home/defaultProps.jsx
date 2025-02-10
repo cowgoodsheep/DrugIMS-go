@@ -12,16 +12,18 @@ const defaultProps = {
     route: {
         path: '/',
         routes: [
+            // 总
+            {
+                path: '/drug',
+                name: '药品信息',
+                access: 'canAdmin',
+            },
+            // 管理员
             {
                 path: '/user',
                 name: '用户信息',
                 access: 'canAdmin',
                 hideInMenu: role !== '管理员'
-            },
-            {
-                path: '/drug',
-                name: '药品信息',
-                access: 'canAdmin',
             },
             {
                 name: '药品库存',
@@ -39,10 +41,17 @@ const defaultProps = {
                 hideInMenu: role !== '管理员'
             },
             {
+                name: '统计信息',
+                path: '/statisticsInfo',
+                hideInMenu: role !== '管理员'
+            },
+            // 客户
+            {
                 name: '我的购买记录',
                 path: '/myBuyRecord',
                 hideInMenu: role !== '客户'
             },
+            // 供应商
             {
                 name: '我的进货记录',
                 path: '/myinput',

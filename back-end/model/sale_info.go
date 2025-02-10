@@ -10,10 +10,11 @@ type SaleInfo struct {
 	SaleId       int32   `json:"sale_id"`       // 销售ID
 	DrugId       int32   `json:"drug_id"`       // 药品ID
 	UserId       int32   `json:"user_id"`       // 客户ID
-	SaleDate     string  `json:"sale_date"`     // 销售日期
 	SaleQuantity int32   `json:"sale_quantity"` // 销售数量
 	SaleAmount   float32 `json:"sale_amount"`   // 销售金额
 	SupplyAmount float32 `json:"supply_amount"` // 进货金额
+	CreateTime   string  `json:"create_time"`
+	UpdateTime   string  `json:"update_time"`
 
 	UserName string `json:"user_name" gorm:"-"` // 用户名称
 	DrugName string `json:"drug_name" gorm:"-"` // 药品名称

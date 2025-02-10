@@ -128,3 +128,8 @@ export const aiChat = async (message) => {
   const data = await serviceAxios.post('/tool/aiChat', message)
   return data
 }
+// 获取统计信息
+export const getStatistics = async (message) => {
+  const data = await serviceAxios.post('/tool/getStatistics', message)
+  return data
+}
