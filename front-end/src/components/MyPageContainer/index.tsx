@@ -13,9 +13,9 @@ import MyModel from '../ShowModel';
 import AuList from '../AuList';
 import UserInfo from '../UserInfo';
 import Drug from '../DrugList';
-import MyDrug from '../MyDrug';
+import MyDrug from '../MySale';
 import Stock from '../Stock'
-import Sell from '../Sell';
+import Sell from '../Sale';
 import Supply from '../Supply'
 import Statistics from '../Statistics'
 import User from '../User'

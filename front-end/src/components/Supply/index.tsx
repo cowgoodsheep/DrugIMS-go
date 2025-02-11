@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Space, Tag } from 'antd';
 import MyTable from '../MyTable';
 import { getSupplyList } from '../../api/Api';
-import { addOneDay } from '../../utils';
+import { formatDate } from '../../utils';
 
 const columns = [
     {
@@ -27,7 +27,7 @@ const columns = [
         width: 100
     },
     {
-        title: '进货药品名称',
+        title: '药品名称',
         dataIndex: 'drug_name',
         key: 'drug_name',
         fixed: 'left',
@@ -35,9 +35,9 @@ const columns = [
     },
     {
         title: '进货日期',
-        dataIndex: 'supply_date',
-        key: 'supply_date',
-        width: 100
+        dataIndex: 'create_time',
+        key: 'create_time',
+        width: 150
     },
     {
         title: '批号',
@@ -86,7 +86,7 @@ export default function PublicDb({ searchValue }: { searchValue: string }) {
         data.map((v, i) => {
             data[i].supply_total_amount = data[i].supply_quantity * (data[i].supply_price || 0);
             data[i].supply_total_amount=data[i].supply_total_amount.toFixed(2)
-            data[i].supply_date = addOneDay(data[i].create_time.split('T')[0])
+            data[i].create_time = formatDate(data[i].create_time)
         })
         setLoading(false)
         setData(data)

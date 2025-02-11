@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Tag, Tooltip, DatePicker, InputNumber, Select, Button, Table, Space, Card } from "antd";
 import moment from "moment";
-import { Line } from "@ant-design/charts";
+import { Line } from "@ant-design/plots";
 import MyTable from '../MyTable';
 import { getStatistics } from "../../api/Api";
 
@@ -86,14 +86,8 @@ export default function PublicDb() {
     dailyStatistics: [], // 确保初始化为一个空数组
   });
 
-  // 图例开关状态
-  const [legendState, setLegendState] = useState({
-    "总销售金额": true,
-    "总利润": true,
-    "总供应金额": true
-  });
 
-  const getData = async (startDate: string | null, endDate: string | null) => {
+  const getData = async (startDate: string | "", endDate: string | "") => {
     setLoading(true);
     try {
       const response = await getStatistics({ startDate, endDate });
@@ -101,16 +95,16 @@ export default function PublicDb() {
         const { total_statistics, daily_statistics, drug_list } = response.data.statistics;
         const dailyStatsArray = Object.entries(daily_statistics).map(([date, stats]) => ({
           date: moment(date).format("YYYY-MM-DD"),
-          sale: stats.sale,
-          profit: stats.profit,
-          supply: stats.supply,
+          sale: parseFloat(stats.sale.toFixed(2)),
+          profit: parseFloat(stats.profit.toFixed(2)),
+          supply: parseFloat(stats.supply.toFixed(2)),
         }));
 
         setData(drug_list || []);
         setStatistics({
-          total_sale: total_statistics.sale,
-          profit: total_statistics.profit,
-          total_supply: total_statistics.supply,
+          total_sale: total_statistics.sale.toFixed(2),
+          profit: total_statistics.profit.toFixed(2),
+          total_supply: total_statistics.supply.toFixed(2),
           dailyStatistics: dailyStatsArray,
         });
       } else {
@@ -138,17 +132,17 @@ export default function PublicDb() {
   };
 
   useEffect(() => {
-    getData(null, null); // 默认加载全部数据
+    getData("", ""); // 默认加载全部数据
   }, []);
 
   useEffect(() => {
     if (timeRange[0] || timeRange[1]) {
       getData(
-        timeRange[0]?.format("YYYY-MM-DD") || null,
-        timeRange[1]?.format("YYYY-MM-DD") || null
+        timeRange[0]?.format("YYYY-MM-DD") || "",
+        timeRange[1]?.format("YYYY-MM-DD") || ""
       );
     } else {
-      getData(null, null); // 如果时间范围为空，加载全部数据
+      getData("", ""); // 如果时间范围为空，加载全部数据
     }
   }, [timeRange]);
 
@@ -171,66 +165,45 @@ export default function PublicDb() {
   const displayedData = sortedData.slice(0, showTop);
 
   const lineChartData = statistics.dailyStatistics.flatMap((item) => [
-    { date: item.date, type: "总销售金额", value: item.sale },
-    { date: item.date, type: "总利润", value: item.profit },
-    { date: item.date, type: "总供应金额", value: item.supply }
+    { date: item.date, value: item.sale, type: "总销售金额" },
+    { date: item.date, value: item.profit, type: "总利润" },
+    { date: item.date, value: item.supply, type: "总供应金额" }
   ]);
 
   const config = {
-    data: lineChartData.filter(item => legendState[item.type]),
-    xField: "date",
-    yField: "value",
-    seriesField: "type",
-    xAxis: {
-      type: "time",
-      tickCount: 5,
+    data: lineChartData,
+    xField: (d) => {
+      const [year, month, day] = d.date.split('-').map(Number);
+      return new Date(year, month - 1, day);
     },
-    yAxis: {
-      label: {
-        formatter: (v) => `${v}元`,
-      },
-    },
-    tooltip: {
-      formatter: (datum) => {
-        return {
-          name: `${datum.date} - ${datum.type}`,
-          value: `${datum.value}元`,
-        };
-      },
-    },
-    legend: {
-      position: 'top',
-      data: [
-        { name: "总销售金额", value: "总销售金额" },
-        { name: "总利润", value: "总利润" },
-        { name: "总供应金额", value: "总供应金额" }
-      ],
-      onClick: (name) => {
-        setLegendState(prevState => ({
-          ...prevState,
-          [name]: !prevState[name]
-        }));
-      }
-    }
+    yField: 'value',
+    sizeField: 'value',
+    shapeField: 'trail',
+    legend: { size: false },
+    colorField: 'type',
   };
 
   return (
     <div>
       <Space direction="vertical" style={{ width: "100%" }}>
+        <span>请选择统计信息展示的时间范围</span>
         <RangePicker
           value={timeRange}
           onChange={(dates) => setTimeRange(dates)}
           picker="date"
           format="YYYY-MM-DD"
         />
-        <Card title="资金流向折线图">
+        {/* 资金流向卡片 */}
+        <Card title="资金流向">
           <p>总销售金额: {statistics.total_sale} 元</p>
           <p>总利润: {statistics.profit} 元</p>
           <p>总供应金额: {statistics.total_supply} 元</p>
           <Line {...config} />
         </Card>
-        <Card title="药品销量情况">
+        {/* 药品销量卡片 */}
+        <Card title="药品销量">
           <Space>
+            <span>排序方式</span>
             <Select
               defaultValue="descend"
               options={[
@@ -239,6 +212,7 @@ export default function PublicDb() {
               ]}
               onChange={handleSortOrderChange}
             />
+            <span>展示数量</span>
             <Select
               defaultValue={10}
               options={[
@@ -254,13 +228,7 @@ export default function PublicDb() {
               onChange={handleTopChange}
             />
           </Space>
-          <Table
-            columns={columns}
-            dataSource={displayedData}
-            loading={loading}
-            rowKey="drug_id"
-            pagination={false}
-          />
+          <MyTable loading={loading} columns={columns} data={displayedData} />
         </Card>
       </Space>
     </div>

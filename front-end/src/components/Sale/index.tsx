@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Space, Tag } from "antd";
 import MyTable from "../MyTable";
 import { getSaleList } from "../../api/Api";
-import { addOneDay } from "../../utils";
+import { formatDate } from "../../utils";
 
 const columns = [
   {
@@ -26,9 +26,9 @@ const columns = [
     width: 100,
   },
   {
-    title: "销售日期",
-    dataIndex: "sale_date",
-    key: "sale_date",
+    title: "销售时间",
+    dataIndex: "create_time",
+    key: "create_time",
     width: 100,
   },
   {
@@ -77,7 +77,7 @@ export default function PublicDb({ searchValue }: { searchValue: string }) {
     setLoading(true);
     const data = await getSaleList(searchValue);
     data.map((v, i) => {
-      data[i].sale_date = addOneDay(data[i].create_time.split("T")[0]);
+      data[i].create_time = formatDate(data[i].create_time);
     });
     setLoading(false);
     setData(data);

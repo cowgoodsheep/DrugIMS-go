@@ -3,20 +3,21 @@ package model
 import (
 	"drugims/dao"
 	"errors"
+	"time"
 )
 
 // SupplyOrder Model
 type SupplyOrder struct {
-	SupplyId       int32   `json:"supply_id"`       // 进货单ID
-	DrugId         int32   `json:"drug_id"`         // 药品ID
-	UserId         int32   `json:"user_id"`         // 客户ID
-	BatchNumber    string  `json:"batch_number"`    // 批号
-	ProductionDate string  `json:"production_date"` // 生产日期
-	SupplyQuantity int32   `json:"supply_quantity"` // 进货数量
-	SupplyPrice    float32 `json:"supply_price"`    // 进货单价
-	Note           string  `json:"note"`            // 备注
-	CreateTime     string  `json:"create_time"`
-	UpdateTime     string  `json:"update_time"`
+	SupplyId       int32     `json:"supply_id"`       // 进货单ID
+	DrugId         int32     `json:"drug_id"`         // 药品ID
+	UserId         int32     `json:"user_id"`         // 客户ID
+	BatchNumber    string    `json:"batch_number"`    // 批号
+	ProductionDate string    `json:"production_date"` // 生产日期
+	SupplyQuantity int32     `json:"supply_quantity"` // 进货数量
+	SupplyPrice    float32   `json:"supply_price"`    // 进货单价
+	Note           string    `json:"note"`            // 备注
+	CreateTime     time.Time `json:"create_time" gorm:"-"`
+	UpdateTime     time.Time `json:"update_time" gorm:"-"`
 
 	UserName string `json:"user_name" gorm:"-"` // 用户名称
 	DrugName string `json:"drug_name" gorm:"-"` // 药品名称
@@ -66,7 +67,7 @@ func LikeGetSupplyListByUserName(userName string) []*SupplyOrder {
 func GetSupplyListByTime(startDate string, endDate string) []*SupplyOrder {
 	sListFind := []*SupplyOrder{}
 	if startDate != "" && endDate != "" {
-		dao.DB.Where("supply_date BETWEEN ? AND ?", startDate, endDate).Find(&sListFind)
+		dao.DB.Where("create_time BETWEEN ? AND ?", startDate, endDate).Find(&sListFind)
 	} else {
 		dao.DB.Find(&sListFind)
 	}

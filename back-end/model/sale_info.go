@@ -3,18 +3,19 @@ package model
 import (
 	"drugims/dao"
 	"errors"
+	"time"
 )
 
 // SaleInfo Model
 type SaleInfo struct {
-	SaleId       int32   `json:"sale_id"`       // 销售ID
-	DrugId       int32   `json:"drug_id"`       // 药品ID
-	UserId       int32   `json:"user_id"`       // 客户ID
-	SaleQuantity int32   `json:"sale_quantity"` // 销售数量
-	SaleAmount   float32 `json:"sale_amount"`   // 销售金额
-	SupplyAmount float32 `json:"supply_amount"` // 进货金额
-	CreateTime   string  `json:"create_time"`
-	UpdateTime   string  `json:"update_time"`
+	SaleId       int32     `json:"sale_id"`       // 销售ID
+	DrugId       int32     `json:"drug_id"`       // 药品ID
+	UserId       int32     `json:"user_id"`       // 客户ID
+	SaleQuantity int32     `json:"sale_quantity"` // 销售数量
+	SaleAmount   float32   `json:"sale_amount"`   // 销售金额
+	SupplyAmount float32   `json:"supply_amount"` // 进货金额
+	CreateTime   time.Time `json:"create_time" gorm:"-"`
+	UpdateTime   time.Time `json:"update_time" gorm:"-"`
 
 	UserName string `json:"user_name" gorm:"-"` // 用户名称
 	DrugName string `json:"drug_name" gorm:"-"` // 药品名称
@@ -97,4 +98,21 @@ func CreateSale(s *SaleInfo) error {
 		return errors.New("空指针错误")
 	}
 	return dao.DB.Model(&SaleInfo{}).Create(s).Error
+}
+
+// GetSaleListByTime 获取根据日期查询销售列表
+func GetSaleListByTime(startDate string, endDate string) []*SaleInfo {
+	sListFind := []*SaleInfo{}
+	if startDate != "" && endDate != "" {
+		dao.DB.Where("create_time BETWEEN ? AND ?", startDate, endDate).Find(&sListFind)
+	} else {
+		dao.DB.Find(&sListFind)
+	}
+	for _, s := range sListFind {
+		uFind := GetUserByUserId(s.UserId)
+		s.UserName = uFind.UserName
+		dFind := GetDrugByDrugId(s.DrugId)
+		s.DrugName = dFind.DrugName
+	}
+	return sListFind
 }

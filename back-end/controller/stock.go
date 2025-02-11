@@ -125,5 +125,5 @@ func GetUserSupplyList(c *gin.Context) {
 		}
 	}
 	// 返回数据
-	c.JSON(http.StatusOK, supplyList)
+	c.JSON(http.StatusOK, supplyListByUserId)
 }

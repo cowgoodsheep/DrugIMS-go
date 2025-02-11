@@ -3,7 +3,7 @@ import { Space, Tag, Popconfirm, Button } from 'antd';
 import MyTable from '../MyTable';
 import { deleteUser, getUserSupplyList } from '../../api/Api';
 import { useModel } from '../../utils';
-import { addOneDay } from '../../utils';
+import { formatDate } from '../../utils';
 
 export default function PublicDb({ searchValue, change }: { searchValue: string }) {
     const [data, setData] = useState([])
@@ -24,7 +24,7 @@ export default function PublicDb({ searchValue, change }: { searchValue: string 
         data.map((v, i) => {
             data[i].supply_total_amount = data[i].supply_quantity * (data[i].supply_price || 0);
             data[i].supply_total_amount=data[i].supply_total_amount.toFixed(2)
-            data[i].supply_date = addOneDay(data[i].supply_date.split('T')[0])
+            data[i].create_time = formatDate(data[i].create_time)
         })
         setLoading(false)
         setData(data)
@@ -47,8 +47,8 @@ export default function PublicDb({ searchValue, change }: { searchValue: string 
         },
         {
             title: '进货日期',
-            dataIndex: 'supply_date',
-            key: 'supply_date',
+            dataIndex: 'create_time',
+            key: 'create_time',
             fixed: 'left',
             width: 100
         },

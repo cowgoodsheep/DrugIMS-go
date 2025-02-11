@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Space, Tag } from "antd";
 import MyTable from "../MyTable";
-import { addOneDay } from "../../utils";
+import { addOneDay, formatDate } from "../../utils";
 import { getStockList } from "../../api/Api";
 const columns = [
   {
@@ -38,8 +38,8 @@ const columns = [
   },
   {
     title: "进货日期",
-    dataIndex: "supply_date",
-    key: "supply_date",
+    dataIndex: "create_time",
+    key: "create_time",
     width: 100,
   },
   {
@@ -72,7 +72,7 @@ export default function PublicDb({ searchValue }: { searchValue: string }) {
       data[i].production_date = addOneDay(
         data[i].production_date.split("T")[0]
       );
-      data[i].supply_date = addOneDay(data[i].create_time.split("T")[0]);
+      data[i].create_time = formatDate(data[i].create_time);
     });
     setLoading(false);
     setData(data);
