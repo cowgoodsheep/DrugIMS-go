@@ -81,6 +81,14 @@ func (d *DrugInfoFlow) buyDrug() (*DrugInfoFlow, error) {
 	}
 	// 取出库存
 	stockList := model.GetStockListByDrugId(d.DrugInfo.DrugId)
+	// 扣之前再检查一遍
+	totalStock := int32(0)
+	for _, stock := range stockList {
+		totalStock += stock.RemainingQuantity
+	}
+	if totalStock < d.DrugInfo.SaleQuantity {
+		return nil, fmt.Errorf("库存不足")
+	}
 	// 根据生产日期从小到大排序
 	sort.Slice(stockList, func(i, j int) bool {
 		dateI, err1 := time.Parse("2006-01-02", stockList[i].ProductionDate)

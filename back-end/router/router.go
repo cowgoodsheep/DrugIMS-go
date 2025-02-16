@@ -63,6 +63,8 @@ func SetupRouter() *gin.Engine {
 		userGroup.POST("/register", controller.UserRegister)
 		// 用户登录
 		userGroup.POST("/login", controller.UserLogin)
+		// 获取个人信息
+		userGroup.POST("/getUser", middleware.JWTMiddleWare(), controller.GetUser)
 		// 更新用户信息
 		userGroup.POST("/update", middleware.JWTMiddleWare(), controller.UpdateUser)
 		// 获取用户列表

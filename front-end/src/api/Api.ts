@@ -22,6 +22,11 @@ export const login = async (postData) => {
   const data = await serviceAxios.post('/user/login', postData)
   return data
 }
+// 获取个人信息
+export const getUser = async (userInfo) => {
+  const data = await serviceAxios.post('/user/getUser', userInfo)
+  return data
+}
 // 修改个人信息
 export const updateUserInfo = async (postData) => {
   postData.user_name = postData.user_name

@@ -8,17 +8,19 @@ import (
 
 // UserInfo Model
 type UserInfo struct {
-	UserId      int32     `json:"user_id"`     // 用户id
-	UserName    string    `json:"user_name"`   // 用户名
-	Password    string    `json:"password"`    // 密码
-	Telephone   string    `json:"telephone"`   // 手机号
-	Description string    `json:"description"` // 描述
-	Avatar      string    `json:"avatar"`      // 头像
-	Address     string    `json:"address"`     // 地址
-	Role        string    `json:"role"`        // 用户角色，管理员;客户;供应商
-	Status      int8      `json:"status"`      // 用户状态，1:正常;2:禁用
-	CreateTime  time.Time `json:"create_time" gorm:"-"`
-	UpdateTime  time.Time `json:"update_time" gorm:"-"`
+	UserId        int32     `json:"user_id"`        // 用户id
+	UserName      string    `json:"user_name"`      // 用户名
+	Password      string    `json:"password"`       // 密码
+	Telephone     string    `json:"telephone"`      // 手机号
+	Description   string    `json:"description"`    // 描述
+	Avatar        string    `json:"avatar"`         // 头像
+	Address       string    `json:"address"`        // 地址
+	Role          string    `json:"role"`           // 用户角色，管理员;客户;供应商
+	Banlance      float32   `json:"banlance"`       // 余额
+	BlockBanlance float32   `json:"block_banlance"` // 冻结余额
+	Status        int8      `json:"status"`         // 用户状态，1:正常;2:禁用
+	CreateTime    time.Time `json:"create_time" gorm:"-"`
+	UpdateTime    time.Time `json:"update_time" gorm:"-"`
 }
 
 // 指定User结构体迁移表user

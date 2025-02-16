@@ -7,6 +7,8 @@ CREATE TABLE `user_info` (
     `avatar` VARCHAR(512) COMMENT '用户头像',
     `address` VARCHAR(256) NULL COMMENT '地址',
     `role` VARCHAR(10) NULL COMMENT '用户角色,管理员;客户;供应商',
+    `balance` DECIMAL(10, 2) NULL COMMENT '余额',
+    `block_balance` DECIMAL(10, 2) NULL COMMENT '冻结余额',
     `status` TINYINT NOT NULL DEFAULT '1',
     `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'

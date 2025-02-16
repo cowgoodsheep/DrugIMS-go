@@ -1,0 +1,15 @@
+.payment-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f2f5;
+}
+
+.drug-info, .payment-options {
+    margin-bottom: 20px;
+}
+
+.drug-info h3, .payment-options h3 {
+    margin-bottom: 10px;
+}

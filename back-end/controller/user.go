@@ -103,6 +103,22 @@ func UserLogin(c *gin.Context) {
 	}})
 }
 
+// 获取个人信息
+func GetUser(c *gin.Context) {
+	// 获取用户信息
+	var userId int32
+	if err := c.ShouldBindJSON(&userId); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code": 400,
+			"data": gin.H{
+				"msg": err.Error(),
+			},
+		})
+		return
+	}
+	c.JSON(http.StatusOK, model.QueryUserByUserId(userId))
+}
+
 // 用户信息更新
 func UpdateUser(c *gin.Context) {
 	// 获取用户信息
