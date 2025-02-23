@@ -5,5 +5,6 @@ const SearchInputList:{[key:string]:string} = {
     'supplyInfo':'输入供应商名称',
     'myBuyRecord':'输入订单号或药品名称',
     'user':'输入用户名称',
+    'approval':'输入用户ID或用户名称',
 }
 export default SearchInputList

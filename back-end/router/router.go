@@ -71,6 +71,10 @@ func SetupRouter() *gin.Engine {
 		userGroup.POST("/getUserList", middleware.JWTMiddleWare(), controller.GetUserList)
 		// 用户注销(软删除)
 		userGroup.POST("/delete", middleware.JWTMiddleWare(), controller.DeleteUser)
+		// 充值
+		userGroup.POST("/recharge", middleware.JWTMiddleWare(), controller.Recharge)
+		// 提现
+		userGroup.POST("/withdraw", middleware.JWTMiddleWare(), controller.Withdraw)
 	}
 
 	// 药品路由组
@@ -86,6 +90,25 @@ func SetupRouter() *gin.Engine {
 		drugGroup.POST("/deleteDrug", middleware.JWTMiddleWare(), controller.DeleteDrug)
 	}
 
+	// 销售路由组
+	saleGroup := r.Group("/sale")
+	{
+		// 创建订单
+		saleGroup.POST("/createOrder", middleware.JWTMiddleWare(), controller.CreateOrder)
+		// 获取订单信息列表
+		saleGroup.POST("/getOrderList", middleware.JWTMiddleWare(), controller.GetOrderList)
+		// 获取我的订单列表
+		saleGroup.POST("/getUserOrderList", middleware.JWTMiddleWare(), controller.GetUserOrderList)
+		// 购买
+		saleGroup.POST("/buyDrug", middleware.JWTMiddleWare(), controller.BuyDrug)
+		// 确认订单
+		saleGroup.POST("/confirmOrder", middleware.JWTMiddleWare(), controller.ConfirmOrder)
+		// 撤销订单
+		saleGroup.POST("/revokeOrder", middleware.JWTMiddleWare(), controller.RevokeOrder)
+		// 退款
+		saleGroup.POST("/refundOrder", middleware.JWTMiddleWare(), controller.RefundOrder)
+	}
+
 	// 库存路由组
 	stockGroup := r.Group("/stock")
 	{
@@ -99,23 +122,22 @@ func SetupRouter() *gin.Engine {
 		stockGroup.POST("/getUserSupplyList", middleware.JWTMiddleWare(), controller.GetUserSupplyList)
 	}
 
-	// 销售路由组
-	saleGroup := r.Group("/sale")
+	// 审批路由组
+	ApprovalGroup := r.Group("/approval")
 	{
-		// 购买
-		saleGroup.POST("/buyDrug", middleware.JWTMiddleWare(), controller.BuyDrug)
-		// 获取销售信息列表
-		saleGroup.POST("/getSaleList", middleware.JWTMiddleWare(), controller.GetSaleList)
-		// 获取我的购买记录列表
-		saleGroup.POST("/getUserSaleList", middleware.JWTMiddleWare(), controller.GetUserSaleList)
+		// 获取审批列表
+		ApprovalGroup.POST("/getApprovalList", middleware.JWTMiddleWare(), controller.GetApprovalList)
+		// 审批审批单
+		ApprovalGroup.POST("/approvalOperate", middleware.JWTMiddleWare(), controller.ApprovalOperate)
 	}
 
+	// 工具路由组
 	toolGroup := r.Group("/tool")
 	{
 		// ai聊天
 		toolGroup.POST("/aiChat", middleware.JWTMiddleWare(), controller.AiChat)
 		// 统计信息
-		toolGroup.POST("/getStatistics", controller.GetStatistics)
+		toolGroup.POST("/getStatistics", middleware.JWTMiddleWare(), controller.GetStatistics)
 	}
 	return r
 }

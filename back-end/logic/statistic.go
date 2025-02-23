@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"sort"
 	"time"
+
+	"github.com/shopspring/decimal"
 )
 
 type PriceStatistics struct {
-	Sale   float32 `json:"sale"`
-	Profit float32 `json:"profit"`
-	Supply float32 `json:"supply"`
+	Sale   decimal.Decimal `json:"sale"`
+	Profit decimal.Decimal `json:"profit"`
+	Supply decimal.Decimal `json:"supply"`
 }
 
 type Statistics struct {
@@ -22,42 +24,44 @@ type Statistics struct {
 // GetStatisticByTime 获取统计信息
 func GetStatisticByTime(startDate string, endDate string) (*Statistics, error) {
 	statistics := &Statistics{
-		TotalStatistics: &PriceStatistics{Sale: 0, Profit: 0, Supply: 0},
+		TotalStatistics: &PriceStatistics{Sale: decimal.Zero, Profit: decimal.Zero, Supply: decimal.Zero},
 		DailyStatistics: make(map[string]*PriceStatistics),
 		DrugList:        make([]*model.DrugInfo, 0),
 	}
 
-	// 获取指定日期内的销售信息和供应信息
-	saleList := model.GetSaleListByTime(startDate, endDate)
+	// 获取指定日期内的订单信息和供应信息
+	orderList := model.GetOrderListByTime(startDate, endDate)
 	supplyList := model.GetSupplyListByTime(startDate, endDate)
 	// 计算售出总价、进货总价以及总利润，并计算每种药的购买数量
 	drugSaleMap := make(map[int32]int32)
 	maxTime := time.Time{}
 	minTime := time.Date(9999, 12, 31, 23, 59, 59, 999999999, time.UTC)
-	for _, sale := range saleList {
-		// 计算总的
-		statistics.TotalStatistics.Sale += sale.SaleAmount
-		statistics.TotalStatistics.Profit += sale.SaleAmount - sale.SupplyAmount
+	for _, order := range orderList {
+		if order.OrderStatus == 1 { // 只计算已完成的订单
+			// 计算总的
+			statistics.TotalStatistics.Sale = statistics.TotalStatistics.Sale.Add(order.SaleAmount)
+			statistics.TotalStatistics.Profit = statistics.TotalStatistics.Profit.Add(order.SaleAmount.Sub(order.SupplyAmount))
 
-		// 计算每日的
-		if sale.CreateTime.Before(minTime) {
-			minTime = sale.CreateTime
-		}
-		if sale.CreateTime.After(maxTime) {
-			maxTime = sale.CreateTime
-		}
-		date := fmt.Sprintf("%d-%02d-%02d", sale.CreateTime.Year(), sale.CreateTime.Month(), sale.CreateTime.Day())
-		if _, ok := statistics.DailyStatistics[date]; !ok {
-			statistics.DailyStatistics[date] = &PriceStatistics{Sale: 0, Profit: 0, Supply: 0}
-		}
-		statistics.DailyStatistics[date].Sale += sale.SaleAmount
-		statistics.DailyStatistics[date].Profit += sale.SaleAmount - sale.SupplyAmount
+			// 计算每日的
+			if order.CreateTime.Before(minTime) {
+				minTime = order.CreateTime
+			}
+			if order.CreateTime.After(maxTime) {
+				maxTime = order.CreateTime
+			}
+			date := fmt.Sprintf("%d-%02d-%02d", order.CreateTime.Year(), order.CreateTime.Month(), order.CreateTime.Day())
+			if _, ok := statistics.DailyStatistics[date]; !ok {
+				statistics.DailyStatistics[date] = &PriceStatistics{Sale: decimal.Zero, Profit: decimal.Zero, Supply: decimal.Zero}
+			}
+			statistics.DailyStatistics[date].Sale = statistics.DailyStatistics[date].Sale.Add(order.SaleAmount)
+			statistics.DailyStatistics[date].Profit = statistics.DailyStatistics[date].Profit.Add(order.SaleAmount.Sub(order.SupplyAmount))
 
-		drugSaleMap[sale.DrugId] = sale.SaleQuantity
+			drugSaleMap[order.DrugId] = order.SaleQuantity
+		}
 	}
 	for _, supply := range supplyList {
 		// 计算总的
-		statistics.TotalStatistics.Supply += supply.SupplyPrice * float32(supply.SupplyQuantity)
+		statistics.TotalStatistics.Supply = statistics.TotalStatistics.Supply.Add(supply.SupplyPrice.Mul(decimal.NewFromInt(int64(supply.SupplyQuantity))))
 
 		// 计算每日的
 		if supply.CreateTime.Before(minTime) {
@@ -68,9 +72,9 @@ func GetStatisticByTime(startDate string, endDate string) (*Statistics, error) {
 		}
 		date := fmt.Sprintf("%d-%02d-%02d", supply.CreateTime.Year(), supply.CreateTime.Month(), supply.CreateTime.Day())
 		if _, ok := statistics.DailyStatistics[date]; !ok {
-			statistics.DailyStatistics[date] = &PriceStatistics{Sale: 0, Profit: 0, Supply: 0}
+			statistics.DailyStatistics[date] = &PriceStatistics{Sale: decimal.Zero, Profit: decimal.Zero, Supply: decimal.Zero}
 		}
-		statistics.DailyStatistics[date].Supply += supply.SupplyPrice * float32(supply.SupplyQuantity)
+		statistics.DailyStatistics[date].Supply = statistics.DailyStatistics[date].Supply.Add(supply.SupplyPrice.Mul(decimal.NewFromInt(int64(supply.SupplyQuantity))))
 	}
 
 	// 遍历日期，将没数据的日期设为0
@@ -86,9 +90,9 @@ func GetStatisticByTime(startDate string, endDate string) (*Statistics, error) {
 		dateStr := d.Format("2006-01-02")
 		if _, exists := statistics.DailyStatistics[dateStr]; !exists {
 			statistics.DailyStatistics[dateStr] = &PriceStatistics{
-				Sale:   0,
-				Profit: 0,
-				Supply: 0,
+				Sale:   decimal.Zero,
+				Profit: decimal.Zero,
+				Supply: decimal.Zero,
 			}
 		}
 	}

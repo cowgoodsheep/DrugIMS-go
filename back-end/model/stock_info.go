@@ -4,18 +4,20 @@ import (
 	"drugims/dao"
 	"errors"
 	"time"
+
+	"github.com/shopspring/decimal"
 )
 
 // StockInfo Model
 type StockInfo struct {
-	StockId           int32     `json:"stock_id"`           // 库存ID
-	DrugId            int32     `json:"drug_id"`            // 药品ID
-	BatchNumber       string    `json:"batch_number"`       // 批号
-	ProductionDate    string    `json:"production_date"`    // 生产日期
-	SupplyPrice       float32   `json:"supply_price"`       // 进货单价
-	RemainingQuantity int32     `json:"remaining_quantity"` // 剩余数量
-	CreateTime        time.Time `json:"create_time" gorm:"-"`
-	UpdateTime        time.Time `json:"update_time" gorm:"-"`
+	StockId           int32           `json:"stock_id"`                                                   // 库存ID
+	DrugId            int32           `json:"drug_id"`                                                    // 药品ID
+	BatchNumber       string          `json:"batch_number"`                                               // 批号
+	ProductionDate    string          `json:"production_date"`                                            // 生产日期
+	SupplyPrice       decimal.Decimal `json:"supply_price" gorm:"type:decimal(10,2);column:supply_price"` // 进货单价
+	RemainingQuantity int32           `json:"remaining_quantity"`                                         // 剩余数量
+	CreateTime        time.Time       `json:"create_time" gorm:"-"`
+	UpdateTime        time.Time       `json:"update_time" gorm:"-"`
 
 	DrugName string `json:"drug_name" gorm:"-"` // 库存剩余数量
 }

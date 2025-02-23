@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState, } from 'react'
-import { Input, theme, Button, Upload, message, Form, Modal, Spin, DatePicker } from 'antd';
+import { Input, theme, Button, DatePicker } from 'antd';
 const { RangePicker } = DatePicker;
 import {
-  SearchOutlined, UploadOutlined
+  SearchOutlined
 } from '@ant-design/icons';
 import {
   PageContainer,
@@ -10,19 +10,18 @@ import {
 } from '@ant-design/pro-components';
 import SearchInputList from './SearchInputList';
 import MyModel from '../ShowModel';
-import AuList from '../AuList';
+import Approval from '../Approval';
 import UserInfo from '../UserInfo';
 import Drug from '../DrugList';
-import MyDrug from '../MySale';
+import MyDrug from '../MyOrder';
 import Stock from '../Stock'
-import Sell from '../Sale';
+import Sale from '../Order';
 import Supply from '../Supply'
 import Statistics from '../Statistics'
 import User from '../User'
 import MySupply from '../MySupply'
 import { useModel } from '../../utils';
 import dayjs from 'dayjs';
-import { getUserSupplyList } from '../../api/Api';
 const MyPageContainer = ({ pathname }: { [key: string]: string }) => {
   const [searchValue, setSearchValue] = useState('')
   const { setType } = useModel()
@@ -54,7 +53,7 @@ const MyPageContainer = ({ pathname }: { [key: string]: string }) => {
         }}
       >
         {pathname === '/myinput' ? <RangePicker onChange={onChange} style={{ marginRight: '20px' }} /> : <></>}
-        {pathname !== '/myinput' && which !== 'statisticsInfo'? <SearchInput placeholder={SearchInputList[which]} setSearchValue={setSearchValue} /> : <></>}
+        {pathname !== '/myinput' && which !== 'statisticsInfo' ? <SearchInput placeholder={SearchInputList[which]} setSearchValue={setSearchValue} /> : <></>}
         {which === 'drug' && role === '管理员' ?
           <Button onClick={() => setType(1)}>添加药品信息</Button>
           : ''
@@ -129,12 +128,13 @@ const MyPageContainer = ({ pathname }: { [key: string]: string }) => {
           {which === 'drug' ? <Drug searchValue={searchValue} /> :
             which === 'myBuyRecord' ? <MyDrug searchValue={searchValue} /> :
               which === 'stock' ? <Stock searchValue={searchValue} /> :
-                which === 'saleInfo' ? <Sell searchValue={searchValue} /> :
+                which === 'saleInfo' ? <Sale searchValue={searchValue} /> :
                   which === 'supplyInfo' ? <Supply searchValue={searchValue} /> :
-                    which === 'statisticsInfo' ? <Statistics searchValue={searchValue} /> :
-                      which === 'user' ? <User searchValue={searchValue} /> :
-                        which === 'myinput' ? <MySupply searchValue={searchValue} change={temp} /> :
-                          <UserInfo />}
+                    which === 'approval' ? <Approval searchValue={searchValue} /> :
+                      which === 'statisticsInfo' ? <Statistics searchValue={searchValue} /> :
+                        which === 'user' ? <User searchValue={searchValue} /> :
+                          which === 'myinput' ? <MySupply searchValue={searchValue} change={temp} /> :
+                            <UserInfo />}
           <div />
         </ProCard>
       </PageContainer>

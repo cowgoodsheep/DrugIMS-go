@@ -33,6 +33,16 @@ func UpdateUser(userInfo *model.UserInfo) (*UserInfoFlow, error) {
 	return NewUserInfoFlow(userInfo).updateUserDo()
 }
 
+// 充值
+func Recharge(userInfo *model.UserInfo) (*UserInfoFlow, error) {
+	return NewUserInfoFlow(userInfo).recharge()
+}
+
+// 提现
+func Withdraw(userInfo *model.UserInfo) (*UserInfoFlow, error) {
+	return NewUserInfoFlow(userInfo).withdraw()
+}
+
 func NewUserInfoFlow(userInfo *model.UserInfo) *UserInfoFlow {
 	return &UserInfoFlow{UserInfo: userInfo}
 }
@@ -204,4 +214,23 @@ func (u *UserInfoFlow) updateUser() error {
 	}
 	model.UpdateUserInfo(u.UserInfo.UserId, u.UserInfo)
 	return nil
+}
+
+func (u *UserInfoFlow) recharge() (*UserInfoFlow, error) {
+	// 检查充值到账情况 TODO
+
+	u.UserInfo.Balance = u.UserInfo.Balance.Add(u.UserInfo.Recharge)
+	model.UpdateUserInfo(u.UserInfo.UserId, u.UserInfo)
+	return nil, nil
+}
+
+func (u *UserInfoFlow) withdraw() (*UserInfoFlow, error) {
+	if u.UserInfo.Balance.LessThan(u.UserInfo.Withdraw) {
+		return nil, errors.New("您的余额不足")
+	}
+	// 检查提现到账情况 TODO
+
+	u.UserInfo.Balance = u.UserInfo.Balance.Sub(u.UserInfo.Withdraw)
+	model.UpdateUserInfo(u.UserInfo.UserId, u.UserInfo)
+	return nil, nil
 }

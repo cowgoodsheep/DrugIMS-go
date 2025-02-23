@@ -180,3 +180,65 @@ func DeleteUser(c *gin.Context) {
 	model.DeleteUser(u.UserId)
 	c.JSON(http.StatusOK, nil)
 }
+
+// 充值
+func Recharge(c *gin.Context) {
+	var u model.UserInfo
+	if err := c.ShouldBindJSON(&u); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code": 400,
+			"data": gin.H{
+				"msg": err.Error(),
+			},
+		})
+		return
+	}
+	_, err := logic.Recharge(&u)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code": 400,
+			"data": gin.H{
+				"msg": err.Error(),
+			},
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": 200,
+		"data": gin.H{
+			"msg": "充值成功",
+		},
+	})
+}
+
+// 提现
+func Withdraw(c *gin.Context) {
+	var u model.UserInfo
+	if err := c.ShouldBindJSON(&u); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code": 400,
+			"data": gin.H{
+				"msg": err.Error(),
+			},
+		})
+		return
+	}
+	_, err := logic.Withdraw(&u)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code": 400,
+			"data": gin.H{
+				"msg": err.Error(),
+			},
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": 200,
+		"data": gin.H{
+			"msg": "提现成功",
+		},
+	})
+}

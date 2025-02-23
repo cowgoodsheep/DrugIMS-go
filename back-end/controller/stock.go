@@ -89,9 +89,9 @@ func GetSupplyList(c *gin.Context) {
 		return
 	}
 	search := fmt.Sprintf("%v", searchValue)
-	saleList := model.LikeGetSupplyListByUserName(search)
+	orderList := model.LikeGetSupplyListByUserName(search)
 	// 返回数据
-	c.JSON(http.StatusOK, saleList)
+	c.JSON(http.StatusOK, orderList)
 }
 
 // 获取用户进货记录列表

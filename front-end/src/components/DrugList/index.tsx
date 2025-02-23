@@ -10,7 +10,7 @@ import {
 } from "antd";
 import { useNavigate } from 'react-router-dom';
 import MyTable from "../MyTable";
-import { getDrugList, buyDrug, deleteDrug } from "../../api/Api";
+import { getDrugList, createOrder, deleteDrug } from "../../api/Api";
 import { useModel } from "../../utils";
 export default function Drug({ searchValue }: { searchValue: string }) {
   const [loading, setLoading] = useState(false);
@@ -20,28 +20,20 @@ export default function Drug({ searchValue }: { searchValue: string }) {
   const role = JSON.parse(localStorage.getItem("userinfo")).role;
   const { setType } = useModel();
   const handleBuy = async (record) => {
-    // const data = await buyDrug({
-    //   ...record,
-    //   sale_quantity: count,
-    //   sale_unit_price: record.price,
-    // });
-    // if (!data) {
-    //   message.warning("药品库存不足，购买失败！");
-    //   location.reload();
-    // } else {
-      const paymentInfo = {
-        drugId: record.drug_id,
-        quantity: count,
-        totalPrice: record.price * count,
-      };
-      localStorage.setItem("paymentInfo", JSON.stringify(paymentInfo));
-      navigate('/pay')
-      location.reload();
-      message.success("购买成功！");
-      // 暂停一会在刷新，让购买成功显示一会
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      location.reload();
-    // }
+    const data = await createOrder({
+      ...record,
+      sale_quantity: count,
+    })
+    const updateRecord = {
+      ...record,
+      type: "buy",
+      sale_quantity: count,
+      drug_id: record.drug_id,
+      order_id: data.order_id,
+    }
+    localStorage.setItem("paymentInfo", JSON.stringify(updateRecord));
+    navigate('/pay')
+    location.reload();
   };
   const handleSupply = async (drug_id) => {
     setType(2);

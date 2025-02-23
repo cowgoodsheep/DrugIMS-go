@@ -4,26 +4,30 @@ import (
 	"drugims/dao"
 	"errors"
 	"time"
+
+	"github.com/shopspring/decimal"
 )
 
 // DrugInfo Model
 type DrugInfo struct {
-	DrugId          int32     `json:"drug_id"`           // 药品ID
-	DrugName        string    `json:"drug_name"`         // 药品名称
-	Manufacturer    string    `json:"manufacturer"`      // 生产厂家
-	Unit            string    `json:"unit"`              // 单位
-	Specification   string    `json:"specification"`     // 规格
-	StockLowerLimit int32     `json:"stock_lower_limit"` // 库存下限
-	StockUpperLimit int32     `json:"stock_upper_limit"` // 库存上限
-	SalePrice       float32   `json:"sale_price"`        // 售价
-	DrugDescription string    `json:"drug_description"`  // 药品说明
-	Img             string    `json:"img"`               // 药品图片
-	CreateTime      time.Time `json:"create_time" gorm:"-"`
-	UpdateTime      time.Time `json:"update_time" gorm:"-"`
+	DrugId          int32           `json:"drug_id"`                                                // 药品ID
+	DrugName        string          `json:"drug_name"`                                              // 药品名称
+	Manufacturer    string          `json:"manufacturer"`                                           // 生产厂家
+	Unit            string          `json:"unit"`                                                   // 单位
+	Specification   string          `json:"specification"`                                          // 规格
+	StockLowerLimit int32           `json:"stock_lower_limit"`                                      // 库存下限
+	StockUpperLimit int32           `json:"stock_upper_limit"`                                      // 库存上限
+	SalePrice       decimal.Decimal `json:"sale_price" gorm:"type:decimal(10,2);column:sale_price"` // 售价
+	DrugDescription string          `json:"drug_description"`                                       // 药品说明
+	Img             string          `json:"img"`                                                    // 药品图片
+	CreateTime      time.Time       `json:"create_time" gorm:"-"`
+	UpdateTime      time.Time       `json:"update_time" gorm:"-"`
 
 	StockRemain  int32 `json:"stock_remain" gorm:"-"`  // 库存剩余数量
 	SaleQuantity int32 `json:"sale_quantity" gorm:"-"` // 购买数量
 	UserId       int32 `json:"user_id" gorm:"-"`       // 购买用户
+	OrderId      int32 `json:"order_id" gorm:"-"`      // 相关订单号
+	PaymentType  int32 `json:"payment_type" gorm:"-"`  // 支付方式
 }
 
 // 指定DrugInfo结构体迁移表user

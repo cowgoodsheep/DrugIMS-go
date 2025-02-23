@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Button, Row, Col } from 'antd';
 import { useModel } from '../../utils';
 import { getUser } from "../../api/Api";
+import { useNavigate } from 'react-router-dom';
 
 const gridStyle: React.CSSProperties = {
   width: '25%',
@@ -12,6 +13,7 @@ const UserInfo: React.FC = () => {
   const { setType } = useModel();
   const [data, setData] = useState(null); // 用户信息
   const [loading, setLoading] = useState(true); // 加载状态
+  const navigate = useNavigate();
 
   useEffect(() => {
     getData();
@@ -20,8 +22,11 @@ const UserInfo: React.FC = () => {
   const getData = async () => {
     setLoading(true);
     try {
+      // 获取用户id
       const userInfo = JSON.parse(localStorage.getItem('userinfo'));
       const data = await getUser(userInfo.user_id);
+      // 更新最新数据
+      localStorage.setItem("userinfo", JSON.stringify(data));
       setData(data);
     } catch (error) {
       console.error("获取用户信息失败：", error);
@@ -35,13 +40,21 @@ const UserInfo: React.FC = () => {
   };
 
   const handleRecharge = () => {
-    // 携带用户信息跳转到充值页面
-    history.push('/recharge', { userInfo: data });
+    const rechargeRecord = {
+      ...data,
+      type: "recharge",
+    }
+    localStorage.setItem("paymentInfo", JSON.stringify(rechargeRecord));
+    navigate('/pay');
   };
 
   const handleWithdraw = () => {
-    // 携带用户信息跳转到提现页面
-    history.push('/withdraw', { userInfo: data });
+    const rechargeRecord = {
+      ...data,
+      type: "withdraw",
+    }
+    localStorage.setItem("paymentInfo", JSON.stringify(rechargeRecord));
+    navigate('/pay');
   };
 
   if (loading) {
@@ -67,15 +80,19 @@ const UserInfo: React.FC = () => {
         </Card.Grid>
       </Card>
       <Button type='primary' onClick={handleUpdate} style={{ margin: '10px' }}>修改信息</Button>
+      {data.role === "客户" || data.role === "供应商" ? (
+        <>
+          < Card title="账户信息">
+            <Card.Grid style={gridStyle} className='B'>账户余额：</Card.Grid>
+            <Card.Grid hoverable={false} style={gridStyle}>{data.balance}</Card.Grid>
+            <Card.Grid style={gridStyle} className='B'>冻结余额：</Card.Grid>
+            <Card.Grid hoverable={false} style={gridStyle}>{data.block_balance}</Card.Grid>
+          </Card >
+          <Button type='primary' onClick={handleRecharge} style={{ margin: '10px' }}>充值</Button>
+          <Button type='primary' onClick={handleWithdraw} style={{ margin: '10px' }}>提现</Button>
+        </>
+      ) : null}
 
-      <Card title="账户信息">
-        <Card.Grid style={gridStyle} className='B'>账户余额：</Card.Grid>
-        <Card.Grid hoverable={false} style={gridStyle}>{data.banlance.toFixed(2)}</Card.Grid>
-        <Card.Grid style={gridStyle} className='B'>冻结余额：</Card.Grid>
-        <Card.Grid hoverable={false} style={gridStyle}>{data.block_banlance.toFixed(2)}</Card.Grid>
-      </Card>
-      <Button type='primary' onClick={handleRecharge} style={{ margin: '10px' }}>充值</Button>
-      <Button type='primary' onClick={handleWithdraw} style={{ margin: '10px' }}>提现</Button>
     </>
   );
 };

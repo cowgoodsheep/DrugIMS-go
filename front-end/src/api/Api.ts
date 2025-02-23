@@ -56,6 +56,16 @@ export const getUserList = async (searchValue) => {
   const data = await serviceAxios.post('/user/getUserList', searchValue)
   return data
 }
+// 充值
+export const recharge = async (postData) => {
+  const data = await serviceAxios.post('/user/recharge', { ...postData, user_id })
+  return data
+}
+// 提现
+export const withdraw = async (postData) => {
+  const data = await serviceAxios.post('/user/withdraw', { ...postData, user_id })
+  return data
+}
 
 // 药品路由组
 // 药品信息
@@ -111,19 +121,51 @@ export const getUserSupplyList = async () => {
 }
 
 // 销售路由组
+// 创建订单
+export const createOrder = async (postData) => {
+  const data = await serviceAxios.post('/sale/createOrder', { ...postData, user_id })
+  return data
+}
+// 获取所有订单信息
+export const getOrderList = async (searchValue) => {
+  const data = await serviceAxios.post('/sale/getOrderList', searchValue)
+  return data
+}
+// 获取我的订单信息
+export const getUserOrderList = async (searchValue) => {
+  const data = await serviceAxios.post('/sale/getUserOrderList', { searchValue, user_id })
+  return data
+}
 // 客户购买药品
 export const buyDrug = async (postData) => {
   const data = await serviceAxios.post('/sale/buyDrug', { ...postData, user_id })
   return data
 }
-// 获取所有销售信息
-export const getSaleList = async (searchValue) => {
-  const data = await serviceAxios.post('/sale/getSaleList', searchValue)
+// 确认订单
+export const confirmOrder = async (postData) => {
+  const data = await serviceAxios.post('/sale/confirmOrder', postData)
   return data
 }
-// 获取我的购买信息
-export const getUserSaleList = async (searchValue) => {
-  const data = await serviceAxios.post('/sale/getUserSaleList', { user_id, searchValue })
+// 撤销订单
+export const revokeOrder = async (postData) => {
+  const data = await serviceAxios.post('/sale/revokeOrder', postData)
+  return data
+}
+// 退款
+export const refundOrder = async (postData) => {
+  const data = await serviceAxios.post('/sale/refundOrder', { ...postData, user_id })
+  return data
+}
+
+// 审批路由组
+// 获取审批列表
+export const getApprovalList = async (postData) => {
+  const data = await serviceAxios.post('/approval/getApprovalList', postData)
+  return data
+}
+// 审批审批单
+export const approvalOperate = async (postData) => {
+  const data = await serviceAxios.post('/approval/approvalOperate', postData)
   return data
 }
 

@@ -41,19 +41,24 @@ const defaultProps = {
                 hideInMenu: role !== '管理员'
             },
             {
+                name: '审批信息',
+                path: '/approval',
+                hideInMenu: role !== '管理员'
+            },
+            {
                 name: '统计信息',
                 path: '/statisticsInfo',
                 hideInMenu: role !== '管理员'
             },
             // 客户
             {
-                name: '我的购买记录',
+                name: '我的订单',
                 path: '/myBuyRecord',
                 hideInMenu: role !== '客户'
             },
             // 供应商
             {
-                name: '我的进货记录',
+                name: '我的进货',
                 path: '/myinput',
                 hideInMenu: role !== '供应商'
             },

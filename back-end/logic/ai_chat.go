@@ -62,7 +62,7 @@ func GetAiChatResponse(questionList []Message) (string, error) {
 			"库存下限:" + strconv.Itoa(int(drugInfo.StockLowerLimit)) + "," +
 			"库存上限:" + strconv.Itoa(int(drugInfo.StockUpperLimit)) + "," +
 			"库存剩余:" + strconv.Itoa(int(drugInfo.StockRemain)) + "," +
-			"售价:" + strconv.Itoa(int(drugInfo.SalePrice)) + "\n"
+			"售价:" + drugInfo.SalePrice.String() + "\n"
 	}
 	drugInfoMsg += "根据用户的病情做出诊断并推荐药物,要根据药店已有药品的实际情况回答"
 	reqData.Messages = append(reqData.Messages, Message{Role: "system", Content: drugInfoMsg})
