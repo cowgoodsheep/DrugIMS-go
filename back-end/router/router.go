@@ -69,8 +69,12 @@ func SetupRouter() *gin.Engine {
 		userGroup.POST("/update", middleware.JWTMiddleWare(), controller.UpdateUser)
 		// 获取用户列表
 		userGroup.POST("/getUserList", middleware.JWTMiddleWare(), controller.GetUserList)
-		// 用户注销(软删除)
+		// 用户注销
 		userGroup.POST("/delete", middleware.JWTMiddleWare(), controller.DeleteUser)
+		// 拉黑用户
+		userGroup.POST("/block", middleware.JWTMiddleWare(), controller.BlockUser)
+		// 解除拉黑
+		userGroup.POST("/unblock", middleware.JWTMiddleWare(), controller.UnblockUser)
 		// 充值
 		userGroup.POST("/recharge", middleware.JWTMiddleWare(), controller.Recharge)
 		// 提现
@@ -138,6 +142,8 @@ func SetupRouter() *gin.Engine {
 		toolGroup.POST("/aiChat", middleware.JWTMiddleWare(), controller.AiChat)
 		// 统计信息
 		toolGroup.POST("/getStatistics", middleware.JWTMiddleWare(), controller.GetStatistics)
+		// 风控
+		toolGroup.POST("/riskManage", middleware.JWTMiddleWare(), controller.RiskManage)
 	}
 	return r
 }

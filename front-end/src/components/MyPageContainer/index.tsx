@@ -18,7 +18,7 @@ import Stock from '../Stock'
 import Sale from '../Order';
 import Supply from '../Supply'
 import Statistics from '../Statistics'
-import User from '../User'
+import User from '../UserList'
 import MySupply from '../MySupply'
 import { useModel } from '../../utils';
 import dayjs from 'dayjs';

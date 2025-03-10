@@ -71,13 +71,17 @@ const columns = [
       if (record.order_status === 0) {
         return <span style={{ color: "red" }}>未付款</span>
       } else if (record.order_status === 1) {
-        return <span style={{ color: "green" }}>已完成</span>
+        return <span style={{ color: 'green' }}>已完成</span>
       } else if (record.order_status === 2) {
         return <span style={{ color: "gray" }}>已关闭</span>
       } else if (record.order_status === 3) {
         return <span style={{ color: "red" }}>待确认</span>
+      } else if (record.order_status === 4) {
+        return <span style={{ color: "red" }}>退款审核中</span>
+      } else if (record.order_status === 5) {
+        return <span style={{ color: "gray" }}>已退款</span>
       } else {
-        return <span>未知状态, 请联系管理员处理</span>
+        return <span>未知状态, 请联系工作人员处理</span>
       }
     },
     width: 100,

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Space, Tag, Popconfirm, Button } from "antd";
 import MyTable from "../MyTable";
-import { deleteUser, getUserList } from "../../api/Api";
+import { deleteUser, getUserList, blockUser,unblockUser } from "../../api/Api";
 import { useModel } from "../../utils";
 
 export default function PublicDb({ searchValue }: { searchValue: string }) {
@@ -70,8 +70,41 @@ export default function PublicDb({ searchValue }: { searchValue: string }) {
       width: 100,
     },
     {
+      title: "余额",
+      dataIndex: "balance",
+      key: "balance",
+      width: 100,
+    },
+    {
+      title: "冻结余额",
+      dataIndex: "block_balance",
+      key: "block_balance",
+      width: 100,
+    },
+    {
+      title: "账号状态",
+      dataIndex: "status",
+      key: "status",
+      width: 100,
+      filters: [
+        {
+          text: "黑名单",
+          value: 2,
+        },
+      ],
+      onFilter: (value, record) => record.status === value,
+      render: (_, record) => {
+        if (record.status === 1) {
+          return <span style={{ color: "green" }}>正常</span>
+        } else if (record.status === 2) {
+          return <span style={{ color: "black" }}>拉黑</span>
+        }
+      },
+    },
+    {
       title: "操作",
       key: "action",
+      align: "center",
       render: (_, record) => (
         <Space size="middle">
           <Button
@@ -82,8 +115,33 @@ export default function PublicDb({ searchValue }: { searchValue: string }) {
           >
             修改
           </Button>
+          {record.status === 2 ? (
+            <Popconfirm
+              title="确定要解除拉黑吗"
+              onConfirm={() => {
+                unblockUser(record.user_id);
+                location.reload();
+              }}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button>解除</Button>
+            </Popconfirm>
+          ) : (
+            <Popconfirm
+              title="确定要拉黑吗"
+              onConfirm={() => {
+                blockUser(record.user_id);
+                location.reload();
+              }}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button danger>拉黑</Button>
+            </Popconfirm>
+          )}
           <Popconfirm
-            title="你确定要删除吗"
+            title="确定要注销吗"
             onConfirm={() => {
               deleteUser(record.user_id);
               location.reload();
@@ -91,7 +149,7 @@ export default function PublicDb({ searchValue }: { searchValue: string }) {
             okText="Yes"
             cancelText="No"
           >
-            <Button danger>删除</Button>
+            <Button danger>注销</Button>
           </Popconfirm>
         </Space>
       ),

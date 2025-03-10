@@ -46,7 +46,17 @@ export const adminUpdateUser = async (postData) => {
   const data = await serviceAxios.post('/user/update', { ...postData, user_id: user_id })
   return data
 }
-// 删除用户信息
+// 拉黑用户
+export const blockUser = async (user_id) => {
+  const data = await serviceAxios.post('/user/block', { user_id })
+  return data
+}
+// 解除拉黑
+export const unblockUser = async (user_id) => {
+  const data = await serviceAxios.post('/user/unblock', { user_id })
+  return data
+}
+// 删除用户
 export const deleteUser = async (user_id) => {
   const data = await serviceAxios.post('/user/delete', { user_id })
   return data
@@ -178,5 +188,10 @@ export const aiChat = async (message) => {
 // 获取统计信息
 export const getStatistics = async (message) => {
   const data = await serviceAxios.post('/tool/getStatistics', message)
+  return data
+}
+// 风控
+export const riskManage = async () => {
+  const data = await serviceAxios.post('/tool/riskManage')
   return data
 }

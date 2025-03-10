@@ -138,6 +138,9 @@ func (u *UserInfoFlow) loginUserCheck() error {
 	if u.UserInfo.Password == "" {
 		return errors.New("密码为空")
 	}
+	if u.UserInfo.Status == 2 {
+		return errors.New("账户被冻结，请联系管理员")
+	}
 	return nil
 }
 

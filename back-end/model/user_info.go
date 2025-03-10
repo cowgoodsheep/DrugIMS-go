@@ -21,6 +21,7 @@ type UserInfo struct {
 	Balance      decimal.Decimal `json:"balance" gorm:"type:decimal(10,2);column:balance"`             // 余额
 	BlockBalance decimal.Decimal `json:"block_balance" gorm:"type:decimal(10,2);column:block_balance"` // 冻结余额
 	Status       int8            `json:"status"`                                                       // 用户状态，1:正常;2:禁用
+	Token        string          `json:"token"`
 	CreateTime   time.Time       `json:"create_time" gorm:"-"`
 	UpdateTime   time.Time       `json:"update_time" gorm:"-"`
 
@@ -102,5 +103,5 @@ func GetUserByUserId(userId int32) *UserInfo {
 
 // DeleteUser 删除用户
 func DeleteUser(userId int32) {
-	dao.DB.Model(&UserInfo{}).Where("user_id = ?", userId).Update("status", 2)
+	dao.DB.Model(&UserInfo{}).Where("user_id = ?", userId).Delete(&UserInfo{})
 }

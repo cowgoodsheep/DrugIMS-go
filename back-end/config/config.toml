@@ -12,6 +12,7 @@ local = "Local"
 # 服务器配置
 [server]
 ip = "127.0.0.1"
+# ip = "192.168.1.42"
 port = 8080
 
 # AiChat配置

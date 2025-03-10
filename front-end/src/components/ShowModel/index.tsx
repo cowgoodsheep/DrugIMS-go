@@ -77,7 +77,7 @@ export default function MyModel() {
           <FormItem label='规格' name='specification' need={true} type='string'></FormItem>
           <FormItem label='库存下限' name='stock_lower_limit' need={true} type='number'></FormItem>
           <FormItem label='库存上限' name='stock_upper_limit' need={true} type='number'></FormItem>
-          <FormItem label='售价' name='price' need={true} type='number'></FormItem>
+          <FormItem label='售价' name='sale_price' need={true} type='number'></FormItem>
         </>)
       case 2:
         return (<>
@@ -103,7 +103,7 @@ export default function MyModel() {
           <FormItem label='规格' name='specification' type='string'></FormItem>
           <FormItem label='库存下限' name='stock_lower_limit' type='number'></FormItem>
           <FormItem label='库存上限' name='stock_upper_limit' type='number'></FormItem>
-          <FormItem label='售价' name='price' type='number'></FormItem>
+          <FormItem label='售价' name='sale_price' type='number'></FormItem>
         </>)
       case 4:
         return (<>

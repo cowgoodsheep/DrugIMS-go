@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"net/http"
+	"sync"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -10,6 +11,9 @@ import (
 
 // 定义secret
 var MySecret = []byte("cowgoodsheep")
+
+// 黑名单存储，使用sync.Map保证线程安全
+var Blacklist = sync.Map{}
 
 type Claims struct {
 	Telephone string `json:"telephone"`
@@ -40,6 +44,10 @@ func ParseToken(tokenString string) (*Claims, bool) {
 	})
 	if token != nil {
 		if key, ok := token.Claims.(*Claims); ok == true {
+			// 检查黑名单
+			if _, found := Blacklist.Load(tokenString); found {
+				return key, false
+			}
 			// 如果token无效，则返回错误
 			if token.Valid == false {
 				return key, false

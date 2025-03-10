@@ -3,7 +3,6 @@ import { Form, Input, InputNumber } from 'antd';
 import { useModel } from '../../utils';
 export default function FormItem({ label, name, need = false, type = '' }) {
   const { max } = useModel()
-  console.log(max, 'in')
   return (
     <Form.Item
       label={label}

@@ -92,6 +92,9 @@ func UserLogin(c *gin.Context) {
 		})
 		return
 	}
+	// 更新用户token
+	u.Token = loginMsg.Token
+	model.UpdateUserInfo(u.UserId, &u)
 	c.Header("Token", loginMsg.Token)
 	c.JSON(http.StatusOK, []gin.H{{
 		"address":   loginMsg.UserInfo.Address,
@@ -178,6 +181,48 @@ func DeleteUser(c *gin.Context) {
 		return
 	}
 	model.DeleteUser(u.UserId)
+	c.JSON(http.StatusOK, nil)
+}
+
+// 拉黑用户
+func BlockUser(c *gin.Context) {
+	// 获取用户信息
+	var u model.UserInfo
+	if err := c.ShouldBindJSON(&u); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code": 400,
+			"data": gin.H{
+				"msg": err.Error(),
+			},
+		})
+		return
+	}
+	// 更新用户账户状态
+	user := model.QueryUserByUserId(u.UserId)
+	user.Status = 2
+	model.UpdateUserInfo(user.UserId, user)
+	// 将旧token暂时存入内存的黑名单，强制踢出登录
+	middleware.Blacklist.Store(user.Token, true)
+	c.JSON(http.StatusOK, nil)
+}
+
+// 解除拉黑
+func UnblockUser(c *gin.Context) {
+	// 获取用户信息
+	var u model.UserInfo
+	if err := c.ShouldBindJSON(&u); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code": 400,
+			"data": gin.H{
+				"msg": err.Error(),
+			},
+		})
+		return
+	}
+	// 更新用户账户状态
+	user := model.QueryUserByUserId(u.UserId)
+	user.Status = 1
+	model.UpdateUserInfo(user.UserId, user)
 	c.JSON(http.StatusOK, nil)
 }
 

@@ -9,7 +9,8 @@ CREATE TABLE `user_info` (
     `role` VARCHAR(10) NULL COMMENT '用户角色,管理员;客户;供应商',
     `balance` DECIMAL(10, 2) NULL COMMENT '余额',
     `block_balance` DECIMAL(10, 2) NULL COMMENT '冻结余额',
-    `status` TINYINT NOT NULL DEFAULT '1',
+    `status` TINYINT NOT NULL DEFAULT '1' COMMENT '账户状态,1正常;2拉黑',
+    `token` VARCHAR(512) NULL COMMENT 'token',
     `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
 ) COMMENT '用户信息表';
