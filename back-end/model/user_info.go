@@ -65,6 +65,13 @@ func QueryUserByUserId(userId int32) *UserInfo {
 	return &uFind
 }
 
+// QueryBlockUserByUserId 用id寻找被拉黑用户
+func QueryBlockUserByUserId(userId int32) *UserInfo {
+	var uFind UserInfo
+	dao.DB.Model(&UserInfo{}).Where("user_id=?", userId).First(&uFind)
+	return &uFind
+}
+
 // QueryUserByTelephone 用手机号寻找用户
 func QueryUserByTelephone(telephone string) *UserInfo {
 	var uFind UserInfo

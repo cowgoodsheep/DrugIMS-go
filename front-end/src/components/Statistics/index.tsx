@@ -86,7 +86,7 @@ export default function PublicDb() {
     dailyStatistics: [], // 确保初始化为一个空数组
   });
 
-
+console.log(statistics)
   const getData = async (startDate: string | "", endDate: string | "") => {
     setLoading(true);
     try {
@@ -95,16 +95,16 @@ export default function PublicDb() {
         const { total_statistics, daily_statistics, drug_list } = response.data.statistics;
         const dailyStatsArray = Object.entries(daily_statistics).map(([date, stats]) => ({
           date: moment(date).format("YYYY-MM-DD"),
-          sale: parseFloat(stats.sale.toFixed(2)),
-          profit: parseFloat(stats.profit.toFixed(2)),
-          supply: parseFloat(stats.supply.toFixed(2)),
+          sale: parseFloat(stats.sale),
+          profit: parseFloat(stats.profit),
+          supply: parseFloat(stats.supply),
         }));
 
         setData(drug_list || []);
         setStatistics({
-          total_sale: total_statistics.sale.toFixed(2),
-          profit: total_statistics.profit.toFixed(2),
-          total_supply: total_statistics.supply.toFixed(2),
+          total_sale: total_statistics.sale,
+          profit: total_statistics.profit,
+          total_supply: total_statistics.supply,
           dailyStatistics: dailyStatsArray,
         });
       } else {

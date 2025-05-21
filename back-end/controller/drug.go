@@ -60,9 +60,9 @@ func AddDrug(c *gin.Context) {
 		})
 		return
 	}
-	// 获取价格
-	var sale_price int64
-	if err := c.ShouldBindJSON(&sale_price); err != nil {
+	// 上传药品信息至添加药品服务
+	_, err := logic.AddDrug(&d)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"code": 400,
 			"data": gin.H{

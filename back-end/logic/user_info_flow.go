@@ -67,19 +67,22 @@ func (u *UserInfoFlow) registerUserCheck() error {
 	if len(u.UserInfo.UserName) > MaxuserNameSize {
 		return errors.New("用户名长度超出限制")
 	}
-	// if len(u.telephone) != 11 { todo
-	// 	return errors.New("手机号码长度不为11位")
-	// }
-	for _, v := range u.UserInfo.Telephone {
-		if v < '0' || v > '9' {
-			return errors.New("手机号码存在非数字字符")
+	// 如果是手机号注册
+	if len(u.UserInfo.UserName) == 0 {
+		if len(u.UserInfo.Telephone) != 11 {
+			return errors.New("手机号码长度不为11位")
+		}
+		for _, v := range u.UserInfo.Telephone {
+			if v < '0' || v > '9' {
+				return errors.New("手机号码存在非数字字符")
+			}
 		}
 	}
-	//判断手机号是否已被注册
+	// 判断手机号是否已被注册
 	if model.IsUserExistByTelephone(u.UserInfo.Telephone) {
 		return errors.New("该手机号已被注册")
 	}
-	//判断用户名是否已被注册
+	// 判断用户名是否已被注册
 	if model.IsUserExistByUserName(u.UserInfo.UserName) {
 		return errors.New("该用户名已被注册")
 	}
@@ -127,12 +130,18 @@ func (u *UserInfoFlow) loginUserDo() (*UserInfoFlow, error) {
 }
 
 func (u *UserInfoFlow) loginUserCheck() error {
-	// if len(u.telephone) != 11 { todo
-	// 	return errors.New("手机号码长度不为11位")
-	// }
-	for _, v := range u.UserInfo.Telephone {
-		if v < '0' || v > '9' {
-			return errors.New("手机号码存在非数字字符")
+	if len(u.UserInfo.UserName) > MaxuserNameSize {
+		return errors.New("用户名长度超出限制")
+	}
+	// 如果是手机号登录
+	if len(u.UserInfo.UserName) == 0 {
+		if len(u.UserInfo.Telephone) != 11 {
+			return errors.New("手机号码长度不为11位")
+		}
+		for _, v := range u.UserInfo.Telephone {
+			if v < '0' || v > '9' {
+				return errors.New("手机号码存在非数字字符")
+			}
 		}
 	}
 	if u.UserInfo.Password == "" {

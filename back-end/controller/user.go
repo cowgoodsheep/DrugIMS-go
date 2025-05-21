@@ -220,7 +220,7 @@ func UnblockUser(c *gin.Context) {
 		return
 	}
 	// 更新用户账户状态
-	user := model.QueryUserByUserId(u.UserId)
+	user := model.QueryBlockUserByUserId(u.UserId)
 	user.Status = 1
 	model.UpdateUserInfo(user.UserId, user)
 	c.JSON(http.StatusOK, nil)
